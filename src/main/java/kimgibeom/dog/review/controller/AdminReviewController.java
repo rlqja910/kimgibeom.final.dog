@@ -59,7 +59,10 @@ public class AdminReviewController {
 		
 		List<Review> reviews = reviewService.readAdminReviews(pagination, search);
 		if(reviews.size() == 0 && page != 1) {
-			if(page == pagination.getStartPage()) range = range - 1;
+			if(page == pagination.getStartPage()) {
+				range = range - 1;
+				model.addAttribute("isDataDel2", false);
+			}
 			page = page - 1;
 			
 			pagination.pageInfo(page, range, listCnt);
@@ -75,6 +78,7 @@ public class AdminReviewController {
 		
 		model.addAttribute("isDataDel", true);
 		model.addAttribute("pageNo", true);
+		model.addAttribute("isDataDel2", true);
 		model.addAttribute("saveFileName", saveFileName);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("search", search);

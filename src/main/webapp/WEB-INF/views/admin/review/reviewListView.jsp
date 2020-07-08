@@ -144,8 +144,15 @@ function exception1(){
 function exception2(){
    if(${isDataDel}===false) {
 	   let pageNo = ${pageNo};
-	  if(pageNo === false){
+	  if(pageNo !== true){
 		  fn_pagination(pageNo, '{pagination.range}', '{pagination.rangeSize}', '{search.keyword}', '{search.searchType}');
+	  }
+   }
+   
+   if(${isDataDel2}===false) {
+	   let pageNo = ${pageNo};
+	  if(pageNo !== true){
+		  fn_prev(pageNo, '{pagination.range}', '{pagination.rangeSize}', '{search.keyword}', '{search.searchType}');
 	  }
    }
 }
