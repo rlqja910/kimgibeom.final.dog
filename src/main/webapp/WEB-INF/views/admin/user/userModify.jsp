@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
+<%@ page import="kimgibeom.dog.user.domain.User"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,9 +10,85 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <%@ include file="../common/scriptImport.jsp"%>
 <script>
+function clearConfirmMsg(){
+	$('#pwmsg').text('');
+	$('#namemsg').text('');
+	$('#phonemsg').text('');
+	$('#emailmsg').text('');
+}
+
+function numberMaxLength(object){ //숫자 max값 초과시 제한
+    if (object.value.length > object.maxLength){
+      object.value = object.value.slice(0, object.maxLength);
+    }    
+ }
+ 
 function userUpdate(){
 	$('#modify').on('click', () => {
-		$('#modifypMsg').html('회원 수정이 완료되었습니다.');
+		clearConfirmMsg();
+		
+		let idCheck = /^[a-z]{1}[a-z0-9]{7,11}$/; //정규식으로 ID 제한
+		let pwCheck = /((?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9가-힣]).{8,15})/;//정규식으로 PW 제한
+		let emailCheck = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;//정규식으로 EMAIL 제한
+		let updateUserName=$('#userName').val().replace(/ /gi, '');
+		
+		if($('#userPw').val() ===''){
+			$('#pwmsg').text('암호를 입력하세요');
+			return;
+		}
+		
+		if(!pwCheck.test($('#userPw').val())){
+			$('#pwmsg').text('암호가 조건에 맞지 않습니다');
+			return;
+		}
+
+		if(updateUserName===''){
+			$('#namemsg').text('이름을 입력하세요');
+			return;
+		}
+		
+		if(!$('#userPhone1').val() &&
+			!$('#userPhone2').val() && !$('#userPhone3').val()){
+			$('#phonemsg').text('전화번호을 입력하세요');
+			return;
+		}
+		else if($('#userPhone1').val().length != 3||$('#userPhone2').val().length != 4||$('#userPhone3').val().length != 4){
+			$('#phonemsg').text('전화번호 형식에 맞게 입력해주세요.(000-0000-0000)');
+			return;
+		}
+		
+		if($('#userEmail').val()===''){
+			$('#emailmsg').text('이메일을 입력하세요');
+			return;
+		}
+		
+		if(!emailCheck.test($('#userEmail').val())){
+			$('#emailmsg').text('이메일이 형식에 맞지 않습니다');
+			return;
+		}
+		
+		let phoneNum=$('#userPhone1').val()+'-'+$('#userPhone2').val()+'-'+$('#userPhone3').val();
+		let user={
+				userId:'${user.userId}',
+				userPw:$('#userPw').val(),
+				userName:updateUserName,
+				userPhone:phoneNum,
+				userEmail:$('#userEmail').val(),
+		};
+
+		$.ajax({
+			url:'../userModifyProc?page='+${page}+'&range='+${range},
+			data:user,
+			success: () =>{
+				swal({
+					title:'',
+					text:'수정성공',
+					type:'success', 
+				},function(){
+					location.href='../userListView?page='+ ${page} + "&range=" + ${range};
+				});
+			},
+		});
 	});
 }
 
@@ -151,29 +229,43 @@ p {
 						<table class='table'>
 							<tr>
 								<th>아이디</th>
-								<td>rlqja910</td>
+								<td>${user.userId}</td>
 							</tr>
 							<tr>
 								<th>비밀번호</th>
-								<td><input type='text' value='abcd1234!' />
-									<p>* * 8자리 이상 16자리 이하, 영소문자, 숫자, 특수문자 각 최소 1개 이상 가능(공백 불가)
-									</p></td>
+								<td><input id='userPw' type='password' maxlength="16"
+									value=${user.userPw } />
+									<p>*8~16글자, 영문, 숫자, 특수문자(1개 이상)</p> <font color='tomato'><p
+											id='pwmsg'></p> </font></td>
 							</tr>
 							<tr>
 								<th>이름</th>
-								<td><input type='text' value='김소현' /></td>
+								<td><input type='text' id='userName' maxlength="10"
+									type='text' value=${user.userName } /><font color='tomato'><p
+											id='namemsg'></p> </font></td>
 							</tr>
 							<tr>
 								<th>전화번호</th>
-								<td><input type='text' style='width: 80px;' value='010' /><strong>&nbsp;
-										- &nbsp;</strong> <input type='text' style='width: 120px;' value='1234' /><strong>&nbsp;
-										- &nbsp;</strong> <input type='text' style='width: 120px;' value='1234' />
-								</td>
+								<%
+									String userPhone = ((User) request.getAttribute("user")).getUserPhone();
+									String[] userPhoneArray = userPhone.split("-");
+								%>
+								<td><input id='userPhone1' type='number' maxlength='3'
+									oninput="numberMaxLength(this);" style='width: 80px;'
+									value=<%=userPhoneArray[0]%> /><strong>&nbsp; -
+										&nbsp;</strong> <input id='userPhone2' type='number' maxlength='4'
+									oninput="numberMaxLength(this);" style='width: 120px;'
+									value=<%=userPhoneArray[1]%> /><strong>&nbsp; -
+										&nbsp;</strong> <input id='userPhone3' type='number' maxlength='4'
+									oninput="numberMaxLength(this);" style='width: 120px;'
+									value=<%=userPhoneArray[2]%> /><font color='tomato'><p
+											id='phonemsg'></p> </font></td>
 							</tr>
 							<tr>
 								<th>이메일</th>
-								<td><input type='email' style='width: 370px;'
-									value='sohyun2@google.com'></td>
+								<td><input type='email' id='userEmail' maxlength="40"
+									style='width: 370px;' value=${user.userEmail}><font
+									color='tomato'><p id='emailmsg'></p> </font></td>
 							</tr>
 						</table>
 
@@ -182,7 +274,7 @@ p {
 							<button type='button' class='btn btn-primary' id='modify'>수정</button>
 							&nbsp;
 							<button type='button' class='btn btn-default'
-								onClick="location.href='01.html'">취소</button>
+								onClick='location.href="../userListView?page="+ ${page} + "&range=" + ${range};'>취소</button>
 						</div>
 					</form>
 				</div>

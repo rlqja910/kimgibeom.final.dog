@@ -425,7 +425,7 @@ $(()=>{
 						</tr>
 					</table>
 					<div class="button">
-						<input type='button' class="ok" value='등록 ' id="register">
+						<input type='button' class="ok" value='수정 ' id="register">
 						<input type='button' class="no"
 							onClick="location.href='<c:url value="/user/mypage"/>'"
 							value='취소'>
