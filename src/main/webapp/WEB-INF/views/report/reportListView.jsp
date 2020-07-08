@@ -87,18 +87,14 @@ function readReports() {
 			</a>
 		</c:forEach>`);
 	
-   // 게시물 내용 스타일 단일화
-   $('.contents').each(function() {
-       let contents = $(this).text().replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "")
-       $(this).text(contents);
-   })
-	
 	if ($('.reportCont').html() == ``) { // 게시물 없을 때
 		$('.reportCont').html('<br><br><br><div class="reportEmpty">등록된 게시글이 없습니다.</div><br>');
-	
 		$('.page').find('li').first().after('<li><a href="">1</a></li>');
 		$('.page').find('a').removeAttr('href');
 		$('.page').find('a').removeAttr('style');
+		
+		if ($('.page').find('a').length > 3) // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동
+			location.href = './reportListView?page=' + (params.page - 1);
 	}
 	
 	$('img').each(function() { // 이미지가 없는 글
@@ -108,10 +104,15 @@ function readReports() {
 		}
 	})
 	
-	$('.contents').each(function (idx, content) { // 내용이 30자 이상이면 ... 처리
+	$('.contents').each(function (idx, content) {
+		// 내용이 30자 이상이면 ... 처리
 		if ($(this).text().length >= 31) {
 			$(this).text($(this).text().substring(0, 30) + "...");
 		}
+		
+		// 게시물 내용 스타일 단일화
+        let contents = $(this).text().replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "")
+        $(this).text(contents);
 	})
 }
 
@@ -423,12 +424,12 @@ $(()=>{
 				<!-- 페이징 -->
 				<div class='page'>
 					<ul>
-						<li><a href=''><<</a></li>
+						<li><a href=''>&laquo;</a></li>
 						<c:forEach begin="${pageMaker.startPage}"
 							end="${pageMaker.endPage}" var="idx">
 							<li><a href="${pageMaker.makeSearch(idx)}">${idx}</a></li>
 						</c:forEach>
-						<li><a href=''>>></a></li>
+						<li><a href=''>&raquo;</a></li>
 					</ul>
 				</div>
 			</div>
