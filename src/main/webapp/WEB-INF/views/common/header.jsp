@@ -5,6 +5,7 @@
 <script>
 $(()=>{ 
 	logInConfrim();
+	hideTip();
 });
 function logInConfrim(){
 	if(`${userId}`){ //로그인 했을경우
@@ -14,6 +15,11 @@ function logInConfrim(){
 			afterUserLogin();
 		}
 	}else{ //로그인이 안된 상태일 때
+	}
+}
+function hideTip(){
+	if(`${userId}`){
+		$('#tip').hide();
 	}
 }
 
@@ -420,6 +426,30 @@ a.close {
 		float: right;
 	}
 }
+	/*툴팁 스타일*/
+	a.tip {
+	    position: relative;
+	}
+	
+	a.tip span {
+	    display: none;
+	    position: absolute;
+	    top: 30px;
+	    left: -65px;
+	    width: 150px;
+	    padding: 5px;
+	    z-index: 100;
+	    background: #000;
+	    color: #fff;
+	    -moz-border-radius: 5px; /* 파폭 박스 둥근 정도 */
+	    -webkit-border-radius: 5px; /* 사파리 박스 둥근 정도 */
+	    font-family: 돋움;
+	    font-size: 12px;
+	}
+	
+	a:hover.tip span {
+	    display: block;
+	}	
 </style>
 
 <div class='headA'>
@@ -445,7 +475,7 @@ a.close {
 		<li><a href='<c:url value="/dog/dogListView"/>'>무료분양</a></li>
 		<li><a href='<c:url value="/review/reviewListView"/>'>입양후기</a></li>
 		<li><a href='<c:url value="/report/reportListView"/>'>신고하기</a></li>
-		<li><a href='<c:url value="/donation/donate"/>'>후원하기</a></li>
+		<li><a href='<c:url value="/donation/donate"/>' class="tip"><span id="tip">로그인 후 후원가능!</span>후원하기</a></li>
 	</ul>
 </div>
 <div class='mobileHead'>

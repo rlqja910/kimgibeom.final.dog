@@ -23,6 +23,10 @@ $(()=>{
 	if(${fn:length(reports)}===0){
 		$('#reportTable').append('<tr><td colspan=2 align=center>등록된 신고글이 없습니다.</td></tr>');
 	}
+	
+	if(${fn:length(sponsorList)}===0){
+		$('#donationTable').append('<tr><td colspan=3 align=center>등록된 후원금이 없습니다.</td></tr>');
+	}
 });
 </script>
 
@@ -173,16 +177,20 @@ body {
 
 				<div class='item' id='supportItem'>
 					<div style='overflow: hidden;'>
-						<strong class='border'>후원금 현황</strong> <a href='donation/01.html'
+						<strong class='border'>후원금 현황</strong> <a href='admin/donation/donationListView'
 							class='plus'><span class='glyphicon glyphicon-plus'></span>
 							더보기</a>
 					</div>
 
 					<hr style='border: 1px solid black; margin-top: 8px;'>
-					<table class='table table-hover'>
-						<tr>
-							<td colspan=2 align=center>결제된 후원금이 없습니다.</td>
-						</tr>
+					<table class='table table-hover' id='donationTable'>
+						<c:forEach items="${sponsorList}" var="sponsor" end="4">
+							<tr>
+								<td>${sponsor.userId}님이</td>
+								<td>${sponsor.price}원을 후원하였습니다</td>
+								<td>${sponsor.donationDate}</td>
+							</tr>
+						</c:forEach>
 					</table>
 				</div>
 				<div class='item' id='moneyItem'>
@@ -248,8 +256,8 @@ body {
 	}
 
 	$(()=>{
-		animateCount1(143252300); 
-		animateCount2(454000);
+		animateCount1(${donaTot}); 
+		animateCount2(${donaMon});
 	});
 </script>
 </html>

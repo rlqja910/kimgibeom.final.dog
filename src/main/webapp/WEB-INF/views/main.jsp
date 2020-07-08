@@ -19,6 +19,13 @@
 		if(${fn:length(mainDogList)}===0){
 			$('#abandonDogListUl').append('<hr><div align=center>등록된 유기견이 없습니다.</div>');
 		}
+		
+		$('#donate').click(()=>{
+			if(`${userId}`){
+				location.href='donation/donate';
+			}
+			else location.href='user/login';
+		})
 	});
 	
 function fn_reviewView(reviewNum){
@@ -588,7 +595,7 @@ function fn_reviewView(reviewNum){
 						있습니다.
 					</div>
 					<div class='sponsorBtn'>
-						<a href='donation/donate'>후원하기</a>
+						<a href='#' id='donate'>후원하기</a>
 					</div>
 				</div>
 			</div>

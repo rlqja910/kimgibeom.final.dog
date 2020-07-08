@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import kimgibeom.dog.dog.domain.Dog;
 import kimgibeom.dog.dog.service.DogService;
+import kimgibeom.dog.donation.domain.Donation;
+import kimgibeom.dog.donation.service.DonationService;
 import kimgibeom.dog.report.domain.Report;
 import kimgibeom.dog.report.domain.SearchCriteria;
 import kimgibeom.dog.report.service.ReportService;
@@ -27,6 +29,8 @@ public class MainController {
 	private ReviewService reviewService;
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private DonationService donationService;
 
 	@RequestMapping("/admin") // admin 페이지 메인
 	public String adminMain(Model model, SearchCriteria scri) {
@@ -36,6 +40,14 @@ public class MainController {
 		scri.setPerPageNum(10);
 		List<Report> reports = reportService.readReports(scri);
 		model.addAttribute("reports", reports);
+		
+		List<Donation> sponsorList = donationService.readSponsors();
+		model.addAttribute("sponsorList",sponsorList);
+		
+		int donaMon = donationService.readDonationMon();
+		int donaTot = donationService.readDonationTot();
+		model.addAttribute("donaMon", donaMon);
+		model.addAttribute("donaTot", donaTot);
 		
 		return "admin/main";
 	}

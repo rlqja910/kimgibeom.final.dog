@@ -5,6 +5,7 @@ import java.sql.Date;
 public class Donation {
 	private int donationNum;
 	private String userId;
+	private String userName;
 	private int price;
 	private Date donationDate;
 	private String userPhone;
@@ -20,6 +21,14 @@ public class Donation {
 		this.userPhone = userPhone;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
 	public String getUserPhone() {
 		return userPhone;
 	}

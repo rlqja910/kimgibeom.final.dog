@@ -69,35 +69,42 @@ function donate(){
 			}); 
 		});
 		
-		$('#ok').on('click',()=>{
+		$('#ok').on('click', ()=>{
 			if(isCheckAccount() && isCheckPrice()){
-				$.ajax({
-						url:'donateProc',
-						data: {
-								'price': $('#price').val(),
-								'userId': `${userId}`,
-								'userPhone': $('#userPhone1').val() +'-'+ $('#userPhone2').val()+'-'+$('#userPhone3').val()
-						},
-						type:'post',			
-						success: (result) =>{
-							swal({
-								title:'후원금 결제가 완료되었습니다',
-								text:'',
-								type:'success', 
-							}, 
-							function(result){
-									location.reload();
-							})
-						},
-						error: (xhr)=> swal("후원금 결제 실패")
-					});
-			}
-			else {
+				let donation = $('#price').val();
+				
+				if(donation < 10000)  {
+					swal('10000원이상 후원가능합니다')
+				}
+				else{
+					$.ajax({
+							url:'donateProc',
+							data: {
+									'price': donation,
+									'userId': `${userId}`,
+									'userPhone': $('#userPhone1').val() +'-'+ $('#userPhone2').val()+'-'+$('#userPhone3').val()
+							},
+							type:'post',			
+							success: (result) =>{
+								swal({
+									title:'후원금 결제가 완료되었습니다',
+									text:'',
+									type:'success', 
+								}, 
+								function(result){
+										location.reload();
+								})
+							},
+							error: (xhr)=> swal("후원금 결제 실패")
+						});
+					
+					}
+			}else {
 				if(!isCheckAccount()) swal("카드번호를 입력해주세요");
 				if(!isCheckPrice()) swal("후원금액을 입력해주세요");
 			}
-		});
-	});	
+		});	
+	});
 }
 
 $(()=>{

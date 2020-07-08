@@ -24,7 +24,7 @@
 
 <!--후원자 리스트-->
 	<select id='getSponsors' resultMap='sponsor'>
-		select d.donation_num, u.user_Id, d.price, d.donation_date, u.phone_number
+		select d.donation_num, u.user_Id, u.name, d.price, d.donation_date, u.phone_number
 		from users u join donations d
 		on u.user_id = d.user_id
 		order by donation_num desc
@@ -32,15 +32,17 @@
 
 <!--검색한 후원자 리스트 -->
 	<select id='getSearchSponsors' parameterType='string' resultMap='sponsor'> 
-		select d.donation_num, u.user_Id, d.price, d.donation_date, u.phone_number
+		select d.donation_num, u.user_Id, u.name, d.price, d.donation_date, u.phone_number
 		from users u join donations d
 		on u.user_id = d.user_id
 		where u.name like '%'||#{userName, jdbcType=VARCHAR}||'%'
+		order by donation_num desc
 	</select>
 	
 	<resultMap id='sponsor' type='donation'>
 		<id column='donation_num' property='donationNum'/>
 		<result column='user_id' property='userId'/>
+		<result column='name' property='userName'/>
 		<result column='price' property='price'/>
 		<result column='donation_date' property='donationDate'/>
 		<result column='phone_number' property='userPhone'/>
