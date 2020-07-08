@@ -51,23 +51,34 @@ public class AdminReviewController {
 		Pagination pagination = new Pagination();
 		
 		if(keyword == null) keyword = "";
-		
 		search.setSearchType(searchType);
 		search.setKeyword(keyword);
 				
 		int listCnt = reviewService.readAdminReviewCnt(search);
 		pagination.pageInfo(page, range, listCnt);
 		
-		if (isData.equals("true")) {
-			model.addAttribute("isData", true);
-		}else {
-			model.addAttribute("isData", false);
+		List<Review> reviews = reviewService.readAdminReviews(pagination, search);
+		if(reviews.size() == 0 && page != 1) {
+			if(page == pagination.getStartPage()) range = range - 1;
+			page = page - 1;
+			
+			pagination.pageInfo(page, range, listCnt);
+			reviews = reviewService.readAdminReviews(pagination, search);
+			model.addAttribute("isDataDel", false);
+			model.addAttribute("pageNo", page);
 		}
+		System.out.println(page);
+		System.out.println(range);
 		
+		if (isData.equals("true")) model.addAttribute("isData", true);
+		else model.addAttribute("isData", false);
+		
+		model.addAttribute("isDataDel", true);
+		model.addAttribute("pageNo", true);
 		model.addAttribute("saveFileName", saveFileName);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("search", search);
-		model.addAttribute("reviewList", reviewService.readAdminReviews(pagination, search));
+		model.addAttribute("reviewList", reviews);
 		
 		return "admin/review/reviewListView";
 	}

@@ -122,7 +122,7 @@ function fn_next(page, range, rangeSize, keyword, searchType){
 	location.href = url;
 }
 
-function exception(){
+function exception1(){
    if(${isData}===false) {
       swal({
          title: '',
@@ -141,11 +141,21 @@ function exception(){
    }
 }
 
-$(() => {
+function exception2(){
+   if(${isDataDel}===false) {
+	   let pageNo = ${pageNo};
+	  if(pageNo === false){
+		  fn_pagination(pageNo, '{pagination.range}', '{pagination.rangeSize}', '{search.keyword}', '{search.searchType}');
+	  }
+   }
+}
+
+$(() => {	
 	addReview();
 	delReview();
 	searchReview();
-	exception();
+	exception1();
+	exception2();
 });
 </script>
 <style>
@@ -404,7 +414,7 @@ img {
 							
 							<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">		
 						    	<li class="<c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
-						    		<a href="#" onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
+						    		<a href="#" id="${idx}" onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
 						    							  			   '${search.keyword}', '${search.searchType}')">
 						    			${idx}
 						    		</a>
