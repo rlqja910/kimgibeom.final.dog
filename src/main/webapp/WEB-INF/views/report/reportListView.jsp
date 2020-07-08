@@ -87,6 +87,12 @@ function readReports() {
 			</a>
 		</c:forEach>`);
 	
+   // 게시물 내용 스타일 단일화
+   $('.contents').each(function() {
+       let contents = $(this).text().replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "")
+       $(this).text(contents);
+   })
+	
 	if ($('.reportCont').html() == ``) { // 게시물 없을 때
 		$('.reportCont').html('<br><br><br><div class="reportEmpty">등록된 게시글이 없습니다.</div><br>');
 	
