@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='kimgibeom.dog.review.dao.map.ReviewMap'>
+	<select id="getAdminReviews" resultMap="reviewMap">
+		<![CDATA[
+		select * from (
+			select rownum rnum, data.* from(
+				select review_num, title, content, reg_date, attach_name
+				from reviews
+				where title like '%' || #{search.keyword} || '%'
+				order by review_num DESC
+			)data where rownum <= #{pagination.listSize} * #{pagination.page}
+		)where rnum > #{pagination.startList}
+		]]>
+	</select>
+	
+	<select id="getUserReviews" parameterType="pagination" resultMap="reviewMap">
+		<![CDATA[
+		select * from (
+			select rownum rnum, data.* from(
+				select review_num, title, content, reg_date, attach_name
+				from reviews
+				order by review_num DESC
+			)data where rownum <= #{pagination.listSize} * #{pagination.page}
+		)where rnum > #{pagination.startList}
+		]]>
+	</select>
+	
+	<select id="getReviews" resultMap="reviewMap">
+		<![CDATA[
+		select * from
+		(
+			select review_num, title, content, reg_date, attach_name 
+			from reviews
+			order by review_num DESC
+		) 
+		where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<select id="getAdminReviewCnt" parameterType="search" resultType="int">
+		select count(review_num) as listCnt
+		from reviews
+		where title like '%' || #{search.keyword} || '%'
+	</select>
+	
+	<select id="getUserReviewCnt" resultType="int">
+		select count(review_num) as listCnt
+		from reviews
+	</select>
+	
+	<select id="getReview" parameterType="int" resultMap="reviewMap">
+		select review_num, title, content, reg_date, attach_name
+		from reviews
+		where review_num = #{reviewNum}
+	</select>
+	
+	<resultMap id="reviewMap" type="review">
+		<id property="reviewNum" column="review_num"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="attachName" column="attach_name"/>
+	</resultMap>
+	
+	<insert id="addReview" parameterType="review">
+		insert into reviews(review_num, title, content, reg_date, attach_name)
+		values(review_num_seq.nextval, #{title}, #{content}, SYSDATE, #{attachName})
+	</insert>
+	
+	<update id="modifyReview" parameterType="review">
+		update reviews
+		set title = #{title}, content = #{content}, attach_name = #{attachName}
+		where review_num = #{reviewNum}
+	</update>
+	
+	<update id="modifyReviewWithOutImg" parameterType="review">
+		update reviews
+		set title = #{title}, content = #{content}
+		where review_num = #{reviewNum}
+	</update>
+
+	<delete id='delReview' parameterType='int'>
+		delete reviews
+		where review_num = #{reviewNum}
+	</delete>
+</mapper>

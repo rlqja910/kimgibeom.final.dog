@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx='http://www.springframework.org/schema/tx'
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/aop
+   http://www.springframework.org/schema/aop/spring-aop.xsd
+   http://www.springframework.org/schema/mvc
+   http://www.springframework.org/schema/mvc/spring-mvc.xsd
+   http://mybatis.org/schema/mybatis-spring
+   http://mybatis.org/schema/mybatis-spring.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- component scan할 패키지 등록 -->
+	<context:component-scan
+		base-package="kimgibeom.dog" />
+
+	<!-- 로그기록 등의 중복작업을 위한 aspect 사용 등록 -->
+	<aop:aspectj-autoproxy />
+
+	<!-- mvc 기능 사용 등록 -->
+	<mvc:annotation-driven />
+
+	<!-- ViewResolver 등록 - jsp를 사용할것이기 때문에 suffix에 .jsp 등록 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<mvc:resources mapping="/res/**" location="/WEB-INF/res/" />
+	<mvc:resources mapping="/attach/**"
+		location="/WEB-INF/attach/" />
+
+	<!-- Java Naming and Directory Interface API 등록 -->
+	<bean id='dataSource'
+		class='org.springframework.jndi.JndiObjectFactoryBean'>
+		<property name='jndiName' value='java:comp/env/jdbc/dog' />
+		<property name='resourceRef' value='true' />
+	</bean>
+
+	<!-- DB연결을 위한 sqlSessionFactory 등록 -->
+	<bean id='sqlSessionFactory'
+		class='org.mybatis.spring.SqlSessionFactoryBean'>
+		<property name='dataSource' ref='dataSource' />
+		<property name='configLocation'
+			value='classpath:kimgibeom/dog/config/sqlMapConfig.xml' />
+		<property name='mapperLocations'>
+			<array>
+				<value>classpath:kimgibeom/dog/**/dao/map/*.xml</value>
+			</array>
+		</property>
+	</bean>
+	<mybatis:scan base-package="kimgibeom.dog.**.dao.map" />
+
+	<!-- JSON과 오브젝트 사이의 변환을 지원하는 MappingJacksonHttpMessageConverter 등록 -->
+	<bean
+		class='org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter'>
+		<property name="messageConverters">
+			<list>
+				<bean
+					class='org.springframework.http.converter.json.MappingJackson2HttpMessageConverter' />
+			</list>
+		</property>
+	</bean>
+
+	<!-- multipart 지원 기능 등록 -->
+	<!-- multipartResolver를 등록하여 multipart형식으로 데이터가 전송된 경우 해당 데이터를 Spring MVC에서 
+		사용할수 있도록 한다. -->
+	<bean
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		id='multipartResolver' />
+
+	<!-- 첨부파일 경로 지정 -->
+	<context:property-placeholder
+		location="classPath:kimgibeom/dog/config/attach.properties" />
+
+
+
+	<!-- DB 상에서의 exception 발생을 지켜보기위한 transactionManager 등록 -->
+	<bean id='transactionManager'
+		class='org.springframework.jdbc.datasource.DataSourceTransactionManager'>
+		<property name='dataSource' ref='dataSource'></property>
+	</bean>
+	<tx:annotation-driven
+		transaction-manager='transactionManager' />
+
+	<!-- interceptor 사용을 위한 bean 객체 등록 -->
+	<bean id='loginCheckInterceptor'
+		class='kimgibeom.dog.user.controller.LoginCheckInterceptor' />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/**" /> <!-- user 업무 시작시 로그인 확인 -->
+			<mvc:mapping path="/report/**" />
+			<ref bean='loginCheckInterceptor' />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id='adminCheckInterceptor'
+		class='kimgibeom.dog.user.controller.AdminCheckInterceptor' />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**" /> <!-- 관리자만 관리자페이지에 접근가능하다 -->
+			<ref bean='adminCheckInterceptor' />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- Google Mail 전송 기능 등록 -->
+	<bean id='mailSender'
+		class='org.springframework.mail.javamail.JavaMailSenderImpl'>
+		<property name='username' value='rlqja910@gmail.com' />
+		<property name='password' value='aopkecgjqgbcelsq' />
+		<property name='javaMailProperties'>
+			<props>
+				<prop key='mail.smtp.starttls.enable'>true</prop>
+				<prop key='mail.smtp.host'>smtp.gmail.com</prop>
+				<prop key='mail.smtp.port'>465</prop>
+				<prop key='mail.smtp.socketFactory.class'>javax.net.ssl.SSLSocketFactory</prop>
+				<prop key='mail.smtp.socketFactory.port'>465</prop>
+				<prop key='mail.smtp.socketFactory.fallback'>false</prop>
+				<prop key='mail.smtp.auth'>true</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

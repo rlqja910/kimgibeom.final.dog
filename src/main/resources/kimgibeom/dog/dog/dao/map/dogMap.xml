@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+
+<mapper namespace='kimgibeom.dog.dog.dao.map.DogMap'>
+	<select id='getDogs' resultType="dog">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		order by 1 desc
+	</select>
+
+	<select id='searchDogs' resultType="dog">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		where kind like '%'||#{dogKind}||'%'
+		and entrance_date>#{dogEntDate}
+		order by 1 desc
+	</select>
+	
+	<select id='searchDogsForTitle' resultType="dog" parameterType="String">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		where title like '%'||#{dogTitle}||'%'
+		order by 1 desc
+	</select>
+	
+	<select id='searchBeforeAdoptDogs' resultType="dog" parameterType="String">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		where title like '%'||#{dogTitle}||'%'
+		and adoption_status='입양미완료'
+		order by 1 desc
+	</select>
+	
+	<select id='searchAfterAdoptDogs' resultType="dog" parameterType="String">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		where title like '%'||#{dogTitle}||'%'
+		and adoption_status='입양완료'
+		order by 1 desc
+	</select>
+	
+	<insert id='addDog' parameterType="dog">
+		insert into dogs
+		values(dog_num_seq.nextval,#{dogTitle},#{dogName},#{dogAge},#{dogKind},#{dogWeight},#{dogGender},'입양미완료',sysdate,#{dogContent},#{attachName})
+	</insert>
+	
+	<select id='searchDog' resultType="dog" parameterType="int">
+		select dog_num dogNum,title
+		dogTitle,name dogName,age dogAge ,kind dogKind,weight dogWeight,gender
+		dogGender,adoption_status dogAdoptionStatus,to_char(entrance_date,'yyyy-mm-dd')
+		dogEntranceDate,content dogContent,attach_name attachName
+		from dogs
+		where dog_num = #{dogNum}
+	</select>
+	
+	<select id='getTodayFindDogsCnt' resultType="int" parameterType="String">
+		select count(name)
+		from dogs
+		where entrance_date=#{entranceDate}
+	</select>
+	
+	<select id='getTotalAbandonDogsCnt' resultType="int">
+		select count(name)
+		from dogs
+	</select>
+	
+	<select id='getAfterAdoptDogCnt' resultType="int">
+		select count(name)
+		from dogs
+		where adoption_status='입양완료'
+	</select>
+	
+	<update id='modifyDogInfoWithoutImg' parameterType="dog">
+		update dogs
+		set
+		title=#{dogTitle},
+		name=#{dogName},
+		age=#{dogAge},
+		kind=#{dogKind},
+		weight=#{dogWeight},
+		gender=#{dogGender},
+		entrance_date=#{dogEntranceDate},
+		content=#{dogContent}
+		where dog_num=#{dogNum}
+	</update>
+	
+	<update id='modifyDogInfo' parameterType="dog">
+		update dogs
+		set
+		title=#{dogTitle},
+		name=#{dogName},
+		age=#{dogAge},
+		kind=#{dogKind},
+		weight=#{dogWeight},
+		gender=#{dogGender},
+		entrance_date=#{dogEntranceDate},
+		content=#{dogContent},
+		attach_Name=#{attachName}
+		where dog_num=#{dogNum}
+	</update>
+	
+	<delete id='delDog' parameterType="int">
+		delete from dogs
+		where dog_num=#{dogNum}
+	</delete>
+</mapper>

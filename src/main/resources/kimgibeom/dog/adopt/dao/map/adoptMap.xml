@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+
+<mapper namespace='kimgibeom.dog.adopt.dao.map.AdoptMap'>
+	<select id='getUserPw' resultType="String"
+		parameterType="String">
+		select password
+		from users
+		where user_id = #{userId}
+	</select>
+
+	<insert id='addReservation' parameterType="adopt">
+		insert into adopts
+		values(adopt_num_seq.nextval,#{user.userId},sysdate,${dog.dogNum})
+	</insert>
+
+	<select id='getReservationUsersForDogNum' parameterType="int"
+		resultType="adopt">
+		select user_id userId
+		from adopts
+		where dog_num=#{dogNum}
+	</select>
+	
+	<select id='getReservationForUserId' parameterType="String" resultMap='forUserMap'>
+		select a.adopt_num, a.reg_date, u.phone_number, u.name un, d.name dn, d.adoption_status
+		from users u join adopts a
+		on u.user_id = a.user_id
+		join dogs d
+		on a.dog_num = d.dog_num
+		where u.user_id = #{userId}
+		order by a.adopt_num desc
+	</select>
+	
+	<resultMap id='forUserMap' type='adopt'>
+		<id property='adoptNum' column='adopt_num'/>
+		<result property='adoptRegDate' column='reg_date'/>
+		<association property='user' resultMap='uMap'/>
+		<association property='dog' resultMap='dMap'/>
+	</resultMap>
+	
+	<resultMap id='uMap' type="user">
+		<id property='userId' column='user_id'/>
+		<result property='userName' column='un'/>
+		<result property='userPhone' column='phone_number'/>
+	</resultMap>
+	
+	<resultMap id='dMap' type="dog">
+		<id property='dogNum' column='dog_num'/>
+		<result property='dogName' column='dn'/>
+		<result property='dogAdoptionStatus' column='adoption_status'/>
+	</resultMap>
+</mapper>

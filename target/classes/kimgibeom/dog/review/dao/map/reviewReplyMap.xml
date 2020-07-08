@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='kimgibeom.dog.review.dao.map.ReviewReplyMap'>
+	<select id="getReviewReplies" parameterType="int" resultType="reviewReply">
+		select review_reply_num replyNum, review_num reviewNum, user_id userId, 
+			content content, reg_date regDate
+		from review_replies
+		where review_num = #{reviewNum}
+		order by review_reply_num DESC
+	</select>
+	
+	<insert id="addReviewReply" parameterType="reviewReply">
+		insert into review_replies(review_reply_num, review_num, user_id, content, reg_date)
+		values(reviewreply_num_seq.nextval, #{reviewNum}, #{userId}, #{content}, SYSDATE)
+	</insert>
+	
+	<delete id="delReviewReply" parameterType="int">
+		delete review_replies
+		where review_reply_num = #{replyNum}
+	</delete>
+</mapper>	

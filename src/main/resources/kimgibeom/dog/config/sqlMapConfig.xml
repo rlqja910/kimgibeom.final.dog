@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE configuration PUBLIC '-//mtbatis.org//DTD Config 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-config.dtd'>
+<configuration>
+
+	<!-- 경로의 Class 이름의 소문자 값을 별명으로 등록 -->
+	<typeAliases>
+		<package name='kimgibeom.dog.user.domain' />
+		<package name="kimgibeom.dog.report.domain" />
+		<package name="kimgibeom.dog.dog.domain" />
+		<package name="kimgibeom.dog.review.domain" />
+		<package name="kimgibeom.dog.donation.domain" />
+		<package name="kimgibeom.dog.adopt.domain" />
+	</typeAliases>
+</configuration>
