@@ -92,8 +92,10 @@ function reportList() {
 		</c:forEach>`)
 	
 	if ($('tbody').html() == ``) {
-		$('tbody').html('<tr><td colspan="5">게시글이 없습니다.</td></tr>');
+		if ($('#pagination').find('a').length > 3) // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동
+			location.href = './reportListView?page=' + (params.page - 1);
 		
+		$('tbody').html('<tr><td colspan="5">게시글이 없습니다.</td></tr>');
 		$('#pagination').find('li').first().after('<li><a href="">1</a></li>');
 		$('#pagination').find('a').removeAttr('href');
 		$('#pagination').find('a').removeAttr('style');
@@ -376,12 +378,12 @@ th {
 
 					<div id="pagination">
 						<ul class="pagination">
-							<li><a href=''><<</a></li>
+							<li><a href=''>&laquo;</a></li>
 							<c:forEach begin="${pageMaker.startPage}"
 								end="${pageMaker.endPage}" var="idx">
 								<li><a href="reportListView${pageMaker.makeSearch(idx)}">${idx}</a></li>
 							</c:forEach>
-							<li><a href=''>>></a></li>
+							<li><a href=''>&raquo;</a></li>
 						</ul>
 					</div>
 				</div>
