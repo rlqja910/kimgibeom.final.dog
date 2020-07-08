@@ -88,13 +88,16 @@ function readReports() {
 		</c:forEach>`);
 	
 	if ($('.reportCont').html() == ``) { // 게시물 없을 때
+		$('.page').find('a').each(function() {
+			if (params.page > 1) { // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동
+				location.href = './reportListView?page=' + (params.page - 1);
+			}
+		})
 		$('.reportCont').html('<br><br><br><div class="reportEmpty">등록된 게시글이 없습니다.</div><br>');
 		$('.page').find('li').first().after('<li><a href="">1</a></li>');
 		$('.page').find('a').removeAttr('href');
 		$('.page').find('a').removeAttr('style');
-		
-		if ($('.page').find('a').length > 3) // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동
-			location.href = './reportListView?page=' + (params.page - 1);
+			
 	}
 	
 	$('img').each(function() { // 이미지가 없는 글
