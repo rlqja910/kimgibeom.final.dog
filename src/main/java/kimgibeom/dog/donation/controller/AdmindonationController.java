@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kimgibeom.dog.donation.domain.Donation;
 import kimgibeom.dog.donation.service.DonationService;
 
-@Controller
+@Controller    
 @RequestMapping("/admin/donation")
 public class AdmindonationController {
 	@Autowired
