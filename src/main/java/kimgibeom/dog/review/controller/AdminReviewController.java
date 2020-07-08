@@ -69,15 +69,14 @@ public class AdminReviewController {
 			reviews = reviewService.readAdminReviews(pagination, search);
 			model.addAttribute("isDataDel", false);
 			model.addAttribute("pageNo", page);
+		}else {
+			model.addAttribute("isDataDel", true);
+			model.addAttribute("pageNo", true);
 		}
-		System.out.println(page);
-		System.out.println(range);
 		
 		if (isData.equals("true")) model.addAttribute("isData", true);
 		else model.addAttribute("isData", false);
 		
-		model.addAttribute("isDataDel", true);
-		model.addAttribute("pageNo", true);
 		model.addAttribute("isDataDel2", true);
 		model.addAttribute("saveFileName", saveFileName);
 		model.addAttribute("pagination", pagination);
