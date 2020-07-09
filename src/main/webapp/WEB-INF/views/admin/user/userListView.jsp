@@ -110,6 +110,23 @@ function exception2(){
 }
 
 $(() => {
+	if(${isData}===false){
+		swal({
+	         title: '',
+	         text: '등록된 회원이 없습니다.',
+	         type: 'warning',
+	         confirmButtonText: '확인',
+	         closeOnConfirm: false
+	      },
+	      function(isConfirm){
+	         if(isConfirm){
+	            let url = "userListView";
+	            url = url +"?isData=" + true;
+	            location.href = url;
+	         }
+	      });
+	}
+	
 	userDel();
 	userSearch();
 	exception2();

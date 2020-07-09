@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kimgibeom.dog.user.domain.User;
 import kimgibeom.dog.user.domain.UserSearch;
@@ -24,10 +25,17 @@ public class AdminUserController {
 
 	@RequestMapping("/userListView")
 	public String moveUserListView(Model model, @RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "true") String isData,
 			@RequestParam(required = false, defaultValue = "1") int range,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false, defaultValue = "userId") String searchType) {
 		UserSearch userSearch = new UserSearch();
+
+		if (isData.equals("true")) {
+			model.addAttribute("isData", true);
+		} else {
+			model.addAttribute("isData", false);
+		}
 
 		if (keyword == null)
 			keyword = "";
@@ -68,9 +76,14 @@ public class AdminUserController {
 
 	@RequestMapping("/userModify/{userId}")
 	public String userDel(@PathVariable String userId, @RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range, Model model) {
+			@RequestParam(required = false, defaultValue = "1") int range, Model model, RedirectAttributes re) {
 
 		User user = userService.findUser(userId);
+
+		if (user == null) {
+			re.addAttribute("isData", false);
+			return "redirect:../userListView";
+		}
 
 		model.addAttribute("user", user);
 		model.addAttribute("page", page);
