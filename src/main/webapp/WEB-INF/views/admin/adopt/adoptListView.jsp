@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -268,7 +269,7 @@ th {
 											<td>${adoptList.user.userName}</td>
 											<td>${adoptList.dog.dogName}</td>
 											<td>${adoptList.user.userPhone}</td>
-											<td>${adoptList.adoptRegDate}</td>
+											<td>${fn:substring(adoptList.adoptRegDate,0,10)}</td>
 											<td>${adoptList.dog.dogAdoptionStatus}</td>
 										</tr>
 									</c:forEach>
