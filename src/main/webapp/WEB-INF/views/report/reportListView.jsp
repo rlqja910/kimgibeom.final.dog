@@ -25,52 +25,37 @@ function reportSearch() {
 	});
 }
 
-function managePaging() {
-    // active 표시
-	if (params.page == 1 || typeof params.page == 'undefined') { // 첫 페이지
-		$('.page').find('a').first().removeAttr('href');
-    	$('.page').find('a').eq(1).css({'background-color':'#333', color:'#fff'});
-    	
-    	if ($('.page').find('a').length == 3) // 첫 페이지가 마지막 페이지인 경우 
-    		$('.page').find('a').last().removeAttr('href');
-    } else {
-    	$('.page').find('a').eq(params.page - (Math.ceil(${pageMaker.endPage} / 5) - 1) * 5)
-    		.css({'background-color':'#333', color:'#fff'});
- 
-    	if (params.page == ${pageMaker.tempEndPage}) // 마지막 페이지
-        	$('.page').find('a').last().removeAttr('href');
-    }
-    
-    // prev 버튼
-    $('.page').find('a').first().click(function() {
-    	let prev = params.page - 1;
-    	
-    	if (prev > 0) // 1페이지가 아니면 이전 페이지로 이동
-    		$(this).attr('href', 'reportListView?page=' + prev);
-    })
-    
-    // next 버튼
-    $('.page').find('a').last().click(function() {
-    	let next = Number(params.page) + 1;
-    	
-    	let isNext = true;
-    	if ($('.page').find('a').length == 3)
-    		isNext = false;
-    	
-    	if (typeof params.page == 'undefined' && isNext) { // 게시판 첫 진입 시 2페이지로 이동
-    		$(this).attr('href', 'reportListView?page=2');
-    	} else if (params.page != ${pageMaker.tempEndPage} && isNext) { // 다음 페이지로 이동
-    		$(this).attr('href', 'reportListView?page=' + next);
-    	}
-    }) 
-}
-
 let params = {};
 window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+if (typeof params.page == 'undefined') params.page = 1;
+
+function managePaging() {
+    // active 표시
+    $('.page').find('a').eq(params.page - (Math.ceil(${pageMaker.endPage} / 5) - 1) * 5)
+		.css({'background-color':'#333', color:'#fff'});
+    
+    // prev 버튼
+    if (params.page == 1) {
+   		$('.page').find('a').first().removeAttr('href');
+   	} else { // 1페이지가 아니면 이전 버튼 활성화
+   	   $('.page').find('a').first().click(function() {
+	       let prev = params.page - 1;
+	       $(this).attr('href', 'reportListView?page=' + prev);
+   	   })
+   	}	
+    
+	// next 버튼
+   	if ($('.page').find('a').length == 3 || params.page == ${pageMaker.tempEndPage}) {
+   		$('.page').find('a').last().removeAttr('href');
+   	} else if ($('.page').find('a').length != 2) { // 마지막 페이지가 아니면 다음 버튼 활성화	
+   		$('.page').find('a').last().click(function() {
+	 		let next = Number(params.page) + 1;
+	 	    $(this).attr('href', 'reportListView?page=' + next);
+	   	})
+   	}
+}
 
 function readReports() {
-    if (typeof params.page == 'undefined') params.page = 1;
-    
 	$('.reportCont').html(
 		`<c:forEach var='report' items='${reports}'>
 			<a href='./reportView/${report.reportNum}?page=\${params.page}'>

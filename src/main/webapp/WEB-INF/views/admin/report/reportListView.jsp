@@ -30,52 +30,36 @@ function reportSearch() {
 
 let params = {};
 window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
-if (typeof params.page == 'undefined')
-	params.page = 1;
+if (typeof params.page == 'undefined') params.page = 1;
 
 function managePaging() {
     // active 표시
-	if (params.page == 1 || typeof params.page == 'undefined') { // 첫 페이지
-		$('#pagination').find('a').first().removeAttr('href');
-    	$('#pagination').find('a').eq(1).css({'background-color':'#333', color:'#fff'});
-    	
-    	if ($('#pagination').find('a').length == 3) // 첫 페이지가 마지막 페이지인 경우 
-    		$('#pagination').find('a').last().removeAttr('href');
-    } else {
-    	$('#pagination').find('a').eq(params.page - (Math.ceil(${pageMaker.endPage} / 5) - 1) * 5)
-    		.css({'background-color':'#333', color:'#fff'});
- 
-    	if (params.page == ${pageMaker.tempEndPage}) // 마지막 페이지
-        	$('#pagination').find('a').last().removeAttr('href');
-    }
+    $('#pagination').find('a').eq(params.page - (Math.ceil(${pageMaker.endPage} / 5) - 1) * 5)
+		.css({'background-color':'#333', color:'#fff'});
     
     // prev 버튼
-    $('#pagination').find('a').first().click(function() {
-    	let prev = params.page - 1;
-    	
-    	if (prev > 0) // 1페이지가 아니면 이전 페이지로 이동
-    		$(this).attr('href', 'reportListView?page=' + prev);
-    })
+    if (params.page == 1) {
+   		$('#pagination').find('a').first().removeAttr('href');
+   	} else { // 1페이지가 아니면 이전 버튼 활성화
+   	   $('#pagination').find('a').first().click(function() {
+	       let prev = params.page - 1;
+	       $(this).attr('href', 'reportListView?page=' + prev);
+   	   })
+   	}	
     
-    // next 버튼
-    $('#pagination').find('a').last().click(function() {
-    	let next = Number(params.page) + 1;
-    	
-    	let isNext = true;
-    	if ($('#pagination').find('a').length == 3)
-    		isNext = false;
-    	
-    	if (typeof params.page == 'undefined' && isNext) { // 게시판 첫 진입 시 2페이지로 이동
-    		$(this).attr('href', 'reportListView?page=2');
-    	} else if (params.page != ${pageMaker.tempEndPage} && isNext) { // 다음 페이지로 이동
-    		$(this).attr('href', 'reportListView?page=' + next);
-    	}
-    })
+	// next 버튼
+   	if ($('#pagination').find('a').length == 3 || params.page == ${pageMaker.tempEndPage}) {
+   		$('#pagination').find('a').last().removeAttr('href');
+   	} else if ($('#pagination').find('a').length != 2) { // 마지막 페이지가 아니면 다음 버튼 활성화	
+   		$('#pagination').find('a').last().click(function() {
+	 		let next = Number(params.page) + 1;
+	 	    $(this).attr('href', 'reportListView?page=' + next);
+	   	})
+   	}
 }
 
 function reportList() {
 	let date = new Date(); 
-	if (typeof params.page == 'undefined') params.page = 1;
 	
 	$('tbody').empty();
 	$('tbody').html(
@@ -196,45 +180,6 @@ body {
 #leftNav {
 	display: flex;
 	position: relative;
-}
-
-#leftNav #sidebar {
-	position: fixed;
-	width: 200px;
-	height: 100%;
-	background: #4b4276;
-	padding: 20px 0;
-}
-
-#leftNav #sidebar h2 {
-	color: #fff;
-	text-align: center;
-	margin-bottom: 30px;
-}
-
-#leftNav #sidebar ul li {
-	padding: 15px;
-	list-style: none;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-	border-top: 1px solid rgba(225, 225, 225, 0.05);
-}
-
-#leftNav #sidebar ul li a {
-	color: #bdb8d7;
-	display: black;
-}
-
-#leftNav #sidebar ul li a span {
-	width: 25px;
-}
-
-#leftNav #sidebar ul li:hover {
-	background: #594f8d;
-}
-
-#leftNav #sidebar ul li:hover a {
-	color: #fff;
-	text-decoration: none;
 }
 
 #leftNav .main_content {
