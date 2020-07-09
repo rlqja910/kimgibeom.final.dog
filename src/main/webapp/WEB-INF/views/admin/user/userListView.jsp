@@ -310,11 +310,12 @@ th {
 											<td>${userList.userPhone}</td>
 											<td>${userList.userEmail}</td>
 											<td>${userList.regDate}</td>
-											<td>
-												<button type='button' class='btn btn-default btn-xs'>
-													<a href='03.html'><span class='glyphicon glyphicon-pencil'></span></a>
-												</button>
-											</td>
+											<td><a
+												href='userModify/${userList.userId}?page=${pagination.page}&range=${pagination.range}'>
+													<button type='button' class='btn btn-default btn-xs'>
+														<span class='glyphicon glyphicon-pencil'></span>
+													</button>
+											</a></td>
 										</tr>
 									</c:forEach>
 								</c:when>
@@ -329,38 +330,34 @@ th {
 						<button type='button' class='btn btn-warning' id='delete'>삭제</button>
 					</div>
 
-					<br>
-					<br>
-					<br>
+					<br> <br> <br>
 
 					<div id="pagination">
 						<ul class="pagination">
 							<c:if test="${pagination.prev}">
-								<li>
-									<a href='#' onclick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
+								<li><a href='#'
+									onclick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
 																 '${pagination.keyword}', '${pagination.searchType}')">
-										&laquo;
-									</a>
-								</li>
+										&laquo; </a></li>
 							</c:if>
-							
-							<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">		
-						    	<li class="<c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
-						    		<a href="#" onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
+
+							<c:forEach begin="${pagination.startPage}"
+								end="${pagination.endPage}" var="idx">
+								<li
+									class="<c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
+									<a href="#"
+									onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
 						    							  			   '${pagination.keyword}', '${pagination.searchType}')">
-						    			${idx}
-						    		</a>
-						    	</li>
+										${idx} </a>
+								</li>
 							</c:forEach>
-						    	
-						    <c:if test="${pagination.next}">
-						        <li>
-						        	<a href='#' onclick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
+
+							<c:if test="${pagination.next}">
+								<li><a href='#'
+									onclick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
 						        								 '${pagination.keyword}', '${pagination.searchType}')">
-						        		&raquo;
-						        	</a>
-						        </li>
-						    </c:if>
+										&raquo; </a></li>
+							</c:if>
 						</ul>
 					</div>
 				</div>
