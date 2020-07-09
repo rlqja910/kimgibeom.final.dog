@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import kimgibeom.dog.adopt.dao.AdoptDao;
 import kimgibeom.dog.adopt.domain.Adopt;
 import kimgibeom.dog.adopt.domain.AdoptPagination;
+import kimgibeom.dog.adopt.domain.AdoptSearch;
 
 @Service
 public class AdoptServiceImpl implements AdoptService {
@@ -39,8 +40,12 @@ public class AdoptServiceImpl implements AdoptService {
 	}
 
 	@Override
-	public int raedAdoptListCnt() {
-		return adoptDao.getAdoptListCnt();
+	public int raedAdoptListCnt(AdoptSearch adoptSearch) {
+		System.out.println(adoptSearch.getSearchType()+"123123213123");
+		System.out.println(adoptDao.getAdoptListCnt(adoptSearch));
+		System.out.println("++++++++++++++++++++222222");
+
+		return adoptDao.getAdoptListCnt(adoptSearch);
 	}
 
 	@Override

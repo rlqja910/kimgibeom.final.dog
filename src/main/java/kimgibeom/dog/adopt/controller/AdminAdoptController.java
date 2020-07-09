@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kimgibeom.dog.adopt.domain.Adopt;
-import kimgibeom.dog.adopt.domain.AdoptPagination;
+import kimgibeom.dog.adopt.domain.AdoptSearch;
 import kimgibeom.dog.adopt.service.AdoptService;
 
 @Controller
@@ -20,21 +20,28 @@ public class AdminAdoptController {
 
 	@RequestMapping("/adoptListView")
 	public String adoptListView(Model model, @RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range) {
-		int listCnt = adoptService.raedAdoptListCnt();
-		AdoptPagination adoptPagination = new AdoptPagination();
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "전체") String searchType) {
+		AdoptSearch adoptSearch = new AdoptSearch();
+		System.out.println(searchType + "------------------");
+		if (searchType.equals("전체"))
+			searchType = "";
+		adoptSearch.setSearchType(searchType);
 
-		adoptPagination.pageInfo(page, range, listCnt);
+		int listCnt = adoptService.raedAdoptListCnt(adoptSearch);
+		adoptSearch.pageInfo(page, range, listCnt);
 
-		List<Adopt> adopts = adoptService.raedAdopts(adoptPagination);
+		System.out.println(adoptSearch.getSearchType() + "------------------");
+
+		List<Adopt> adopts = adoptService.raedAdopts(adoptSearch);
 		if (adopts.size() == 0 && page != 1) {
-			if (page == adoptPagination.getStartPage()) {
+			if (page == adoptSearch.getStartPage()) {
 				range = range - 1;
 			}
 			page = page - 1;
 
-			adoptPagination.pageInfo(page, range, listCnt);
-			adopts = adoptService.raedAdopts(adoptPagination);
+			adoptSearch.pageInfo(page, range, listCnt);
+			adopts = adoptService.raedAdopts(adoptSearch);
 			model.addAttribute("isDataDel", false);
 			model.addAttribute("pageNo", page);
 		} else {
@@ -42,7 +49,12 @@ public class AdminAdoptController {
 			model.addAttribute("pageNo", true);
 		}
 
-		model.addAttribute("pagination", adoptPagination);
+		for (Adopt aaa : adopts) {
+			System.out.println(aaa.getAdoptNum());
+			System.out.println(aaa.getUser().getUserName());
+		}
+
+		model.addAttribute("pagination", adoptSearch);
 		model.addAttribute("adoptList", adopts);
 
 		return "admin/adopt/adoptListView";

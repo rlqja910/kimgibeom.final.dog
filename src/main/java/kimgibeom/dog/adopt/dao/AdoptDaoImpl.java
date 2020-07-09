@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import kimgibeom.dog.adopt.dao.map.AdoptMap;
 import kimgibeom.dog.adopt.domain.Adopt;
 import kimgibeom.dog.adopt.domain.AdoptPagination;
+import kimgibeom.dog.adopt.domain.AdoptSearch;
 
 @Repository
 public class AdoptDaoImpl implements AdoptDao {
@@ -35,8 +36,8 @@ public class AdoptDaoImpl implements AdoptDao {
 	}
 
 	@Override
-	public int getAdoptListCnt() {
-		return adoptMap.getAdoptListCnt();
+	public int getAdoptListCnt(AdoptSearch adoptSearch) {
+		return adoptMap.getAdoptListCnt(adoptSearch);
 	}
 
 	@Override

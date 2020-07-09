@@ -4,6 +4,7 @@ import java.util.List;
 
 import kimgibeom.dog.adopt.domain.Adopt;
 import kimgibeom.dog.adopt.domain.AdoptPagination;
+import kimgibeom.dog.adopt.domain.AdoptSearch;
 
 public interface AdoptMap {
 	String getUserPw(String userId);
@@ -14,7 +15,7 @@ public interface AdoptMap {
 
 	List<Adopt> getReservationForUserId(String userId);
 
-	int getAdoptListCnt();
+	int getAdoptListCnt(AdoptSearch adoptSearch);
 
 	List<Adopt> getAdopts(AdoptPagination adoptPagination);
 }

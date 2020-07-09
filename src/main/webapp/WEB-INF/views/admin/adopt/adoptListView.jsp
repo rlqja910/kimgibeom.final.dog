@@ -10,39 +10,76 @@
 <%@ include file="../common/scriptImport.jsp"%>
 <script>
 
-function fn_prev(page, range, rangeSize){
+function selectSort(){
+	$('#selectBox').change(()=>{
+		let url = "adoptListView";
+		
+		if($("#selectBox option:selected").val()==='전체'){
+			$('#selectBox').val('전체').prop("selected",true);
+			sessionStorage.setItem("selectStorage",'전체');
+			console.log('1');
+			location.href = url;
+		}else if($("#selectBox option:selected").val()==='입양완료'){
+			$('#selectBox').val('입양완료').prop("selected",true);
+			url = url + "?searchType=입양완료";
+			sessionStorage.setItem("selectStorage",'입양완료');
+			console.log('2');
+			location.href = url;
+		}else if($("#selectBox option:selected").val()==='입양미완료'){
+			$('#selectBox').val('입양미완료').prop("selected",true);
+			url = url + "?searchType=입양미완료";
+			sessionStorage.setItem("selectStorage",'입양미완료');
+			console.log('3');
+			location.href = url;
+		}	
+	})
+}
+
+function fn_prev(page, range, rangeSize,searchType){
 	page = ((range - 2) * rangeSize) + 1;
 	range = range - 1;
 	
 	let url = "adoptListView";
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
 
-function fn_pagination(page, range, rangeSize){
+function fn_pagination(page, range, rangeSize,searchType){
 	let url = "adoptListView";
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
 
-function fn_next(page, range, rangeSize){
+function fn_next(page, range, rangeSize,searchType){
 	page = parseInt(range * rangeSize) + 1;
 	range = parseInt(range) + 1;
 	
 	let url = "adoptListView";
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
 
 $(() => {
+	selectSort();
 	
-	
+	if(sessionStorage.getItem("selectStorage")==='입양미완료'){
+		$('#selectBox').val('입양미완료').prop("selected",true);
+	}
+	else if(sessionStorage.getItem("selectStorage")==='입양완료'){
+		$('#selectBox').val('입양완료').prop("selected",true);
+	}
+	else if(sessionStorage.getItem("selectStorage")==='전체'){
+		$('#selectBox').val('전체').prop("selected",true);
+	}
 	
 	$('#complete').click(() => {
 		if($('input:checkbox').is(':checked')) {
@@ -231,10 +268,11 @@ th {
 
 					<form action='#'>
 						<div class='form-group' style='background-color: #eeeeee;'>
-							<select class='form-control'
+							<select class='form-control' id='selectBox'
 								style='width: 120px; height: 35px; float: left;'>
-								<option>분양 미완료</option>
-								<option>분양 완료</option>
+								<option>전체</option>
+								<option>입양미완료</option>
+								<option>입양완료</option>
 							</select>
 						</div>
 					</form>
@@ -272,7 +310,7 @@ th {
 											<td>${fn:substring(adoptList.adoptRegDate,0,10)}</td>
 											<td>${adoptList.dog.dogAdoptionStatus}</td>
 										</tr>
-									</c:forEach> 
+									</c:forEach>
 								</c:when>
 							</c:choose>
 						</tbody>
@@ -292,7 +330,7 @@ th {
 						<ul class="pagination">
 							<c:if test="${pagination.prev}">
 								<li><a href='#'
-									onclick="fn_prev('${pagination.page}','${pagination.range}','${pagination.rangeSize}')">&laquo;
+									onclick="fn_prev('${pagination.page}','${pagination.range}','${pagination.rangeSize}', '${pagination.searchType}')">&laquo;
 								</a></li>
 							</c:if>
 
@@ -301,13 +339,13 @@ th {
 								<li
 									class="<c:out value="${pagination.page == idx ? 'active' : ''}"/>">
 									<a href="#"
-									onclick="fn_pagination('${idx}','${pagination.range}','${pagination.rangeSize}')">${idx}</a>
+									onclick="fn_pagination('${idx}','${pagination.range}','${pagination.rangeSize}', '${pagination.searchType}')">${idx}</a>
 								</li>
 							</c:forEach>
 
 							<c:if test="${pagination.next}">
 								<li><a href='#'
-									onclick="fn_next('${pagination.page}','${pagination.range}','${pagination.rangeSize}')">&raquo;
+									onclick="fn_next('${pagination.page}','${pagination.range}','${pagination.rangeSize}', '${pagination.searchType}')">&raquo;
 								</a></li>
 							</c:if>
 						</ul>
