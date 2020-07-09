@@ -272,7 +272,7 @@ th {
 											<td>${fn:substring(adoptList.adoptRegDate,0,10)}</td>
 											<td>${adoptList.dog.dogAdoptionStatus}</td>
 										</tr>
-									</c:forEach>
+									</c:forEach> 
 								</c:when>
 							</c:choose>
 						</tbody>
