@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kimgibeom.dog.adopt.dao.AdoptDao;
 import kimgibeom.dog.adopt.domain.Adopt;
+import kimgibeom.dog.adopt.domain.AdoptPagination;
 
 @Service
 public class AdoptServiceImpl implements AdoptService {
@@ -35,5 +36,15 @@ public class AdoptServiceImpl implements AdoptService {
 	@Override
 	public List<Adopt> readReservationForUserId(String userId) {
 		return adoptDao.getReservationForUserId(userId);
+	}
+
+	@Override
+	public int raedAdoptListCnt() {
+		return adoptDao.getAdoptListCnt();
+	}
+
+	@Override
+	public List<Adopt> raedAdopts(AdoptPagination adoptPagination) {
+		return adoptDao.getAdopts(adoptPagination);
 	}
 }

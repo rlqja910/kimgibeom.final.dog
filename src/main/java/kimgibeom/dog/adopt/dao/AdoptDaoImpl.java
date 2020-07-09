@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import kimgibeom.dog.adopt.dao.map.AdoptMap;
 import kimgibeom.dog.adopt.domain.Adopt;
+import kimgibeom.dog.adopt.domain.AdoptPagination;
 
 @Repository
 public class AdoptDaoImpl implements AdoptDao {
@@ -31,5 +32,15 @@ public class AdoptDaoImpl implements AdoptDao {
 	@Override
 	public List<Adopt> getReservationForUserId(String userId) {
 		return adoptMap.getReservationForUserId(userId);
+	}
+
+	@Override
+	public int getAdoptListCnt() {
+		return adoptMap.getAdoptListCnt();
+	}
+
+	@Override
+	public List<Adopt> getAdopts(AdoptPagination adoptPagination) {
+		return adoptMap.getAdopts(adoptPagination);
 	}
 }

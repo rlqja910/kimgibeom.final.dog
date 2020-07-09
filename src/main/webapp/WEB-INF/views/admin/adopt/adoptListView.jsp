@@ -1,14 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset='UTF-8'>
 <title>ADMIN PAGE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@ include file="../common/scriptImport.jsp" %>
+<%@ include file="../common/scriptImport.jsp"%>
 <script>
+
+function fn_prev(page, range, rangeSize){
+	page = ((range - 2) * rangeSize) + 1;
+	range = range - 1;
+	
+	let url = "adoptListView";
+	url = url + "?page=" + page;
+	url = url + "&range=" + range;
+	
+	location.href = url;
+}
+
+function fn_pagination(page, range, rangeSize){
+	let url = "adoptListView";
+	url = url + "?page=" + page;
+	url = url + "&range=" + range;
+	
+	location.href = url;
+}
+
+function fn_next(page, range, rangeSize){
+	page = parseInt(range * rangeSize) + 1;
+	range = parseInt(range) + 1;
+	
+	let url = "adoptListView";
+	url = url + "?page=" + page;
+	url = url + "&range=" + range;
+	
+	location.href = url;
+}
+
 $(() => {
+	
+	
+	
 	$('#complete').click(() => {
 		if($('input:checkbox').is(':checked')) {
 			swal({
@@ -70,8 +104,8 @@ body {
 #leftNav #sidebar ul li {
 	padding: 15px;
 	list-style: none;
-	border-bottom: 1px solid rgba(0,0,0,0.05);
-	border-top: 1px solid rgba(225,225,225,0.05);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	border-top: 1px solid rgba(225, 225, 225, 0.05);
 }
 
 #leftNav #sidebar ul li a {
@@ -104,7 +138,7 @@ body {
 	border-bottom: 1px solid #e0e4e8;
 }
 
-#leftNav .main_content .header .border{
+#leftNav .main_content .header .border {
 	font-size: 19px;
 }
 
@@ -115,7 +149,7 @@ body {
 	float: right;
 }
 
-#leftNav .main_content .header #topButton a{
+#leftNav .main_content .header #topButton a {
 	text-decoration: none;
 }
 
@@ -139,7 +173,7 @@ body {
 	color: #fff;
 }
 
-tr > th {
+tr>th {
 	background: #dbd9e3;
 }
 
@@ -160,7 +194,7 @@ th {
 	width: 200px;
 }
 
-.buttons{
+.buttons {
 	float: right;
 }
 
@@ -172,92 +206,114 @@ th {
 </head>
 
 <body>
-<div class='wrapper' id='leftNav'>
-	<div class='sidebar' id='sidebar'>
-		<%@ include file="../common/nav.jsp"%>
-	</div>
-	<div class='main_content'>
-		<div class='header'>
-			<strong>&nbsp;&nbsp;ADMINSTRATOR</strong>
-			<div id='topButton'>
-				<a href='<c:url value='/admin/logo/logoRegist'/>'>로고관리</a>&nbsp;|&nbsp;
-					<a href='<c:url value='/admin/banner/bannerRegist'/>'>배너관리</a>&nbsp;|&nbsp; 
-					<a href='<c:url value='/'/>'>홈페이지 돌아가기</a>&nbsp;|&nbsp; 
-					<a href='<c:url value='/user/logout'/>'>로그아웃</a>
-			</div>
+	<div class='wrapper' id='leftNav'>
+		<div class='sidebar' id='sidebar'>
+			<%@ include file="../common/nav.jsp"%>
 		</div>
-		<div class='info'>
-			<div class='content'>
-				<h3>
-					<span class='glyphicon glyphicon-calendar'></span>
-					<strong> 분양관리</strong>
-				</h3>
-				<hr style='border: 1px solid #a0a0a0;'>
-			
-				<form action='#'>
-					<div class='form-group' style='background-color:#eeeeee;'>
-						<select class='form-control' style='width: 120px; height: 35px; float:left;'>
-							<option>분양 미완료</option>
-							<option>분양 완료</option>
-						</select>
-					</div>		
-				</form>
-				
-				<br>
-				<p>&nbsp;</p>
-				
-				<table class='table table-hover'>
-					<thead>
-						<tr>
-							<th>선택</th>
-							<th>번호</th>
-							<th>이름</th>
-							<th class='phone_num'>핸드폰 번호</th>
-							<th class='date'>신청일</th>
-							<th class='state'>상태</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type='checkbox'/></td>
-							<td>123</td>
-							<td>김소현</td>
-							<td>010-3534-8984</td>
-							<td>2016-06-02</td>
-							<td>입양 미완료</td>
-						</tr>
-						<tr>
-							<td><input type='checkbox'/></td>
-							<td>122</td>
-							<td>김아림</td>
-							<td>010-9844-4548</td>
-							<td>2016-06-02</td>
-							<td>입양 미완료</td>
-						</tr>				
-					</tbody>
-				</table>	
-					
-				<div class='buttons'>
-					<button type='button' class='btn btn-primary' id='complete'>분양 완료</button>&nbsp;
-					<button type='button' class='btn btn-warning' id='cancel'>분양 취소</button>
-				</div>	
-				
-				<br><br><br>
-					
-				<div id="pagination">
-					<ul class="pagination">
-					    <li><a href="#">&laquo;</a></li>
-					    <li><a href="#">1</a></li>
-					    <li><a href="#">2</a></li>
-					    <li><a href="#">3</a></li>
-					    <li><a href="#">4</a></li>
-					    <li><a href="#">5</a></li>
-					    <li><a href="#">&raquo;</a></li>
-					</ul>
+		<div class='main_content'>
+			<div class='header'>
+				<strong>&nbsp;&nbsp;ADMINSTRATOR</strong>
+				<div id='topButton'>
+					<a href='<c:url value='/admin/logo/logoRegist'/>'>로고관리</a>&nbsp;|&nbsp;
+					<a href='<c:url value='/admin/banner/bannerRegist'/>'>배너관리</a>&nbsp;|&nbsp;
+					<a href='<c:url value='/'/>'>홈페이지 돌아가기</a>&nbsp;|&nbsp; <a
+						href='<c:url value='/user/logout'/>'>로그아웃</a>
+				</div>
+			</div>
+			<div class='info'>
+				<div class='content'>
+					<h3>
+						<span class='glyphicon glyphicon-calendar'></span> <strong>
+							분양관리</strong>
+					</h3>
+					<hr style='border: 1px solid #a0a0a0;'>
+
+					<form action='#'>
+						<div class='form-group' style='background-color: #eeeeee;'>
+							<select class='form-control'
+								style='width: 120px; height: 35px; float: left;'>
+								<option>분양 미완료</option>
+								<option>분양 완료</option>
+							</select>
+						</div>
+					</form>
+
+					<br>
+					<p>&nbsp;</p>
+
+					<table class='table table-hover'>
+						<thead>
+							<tr>
+								<th>선택</th>
+								<th>번호</th>
+								<th>신청자</th>
+								<th>유기견 이름</th>
+								<th class='phone_num'>핸드폰 번호</th>
+								<th class='date'>신청일</th>
+								<th class='state'>상태</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+								<c:when test="${empty adoptList}">
+									<tr>
+										<td colspan=7>신청된 예약이 없습니다.</td>
+									</tr>
+								</c:when>
+								<c:when test="${!empty adoptList}">
+									<c:forEach var="adoptList" items="${adoptList}">
+										<tr>
+											<td><input type='checkbox' /></td>
+											<td>${adoptList.adoptNum}</td>
+											<td>${adoptList.user.userName}</td>
+											<td>${adoptList.dog.dogName}</td>
+											<td>${adoptList.user.userPhone}</td>
+											<td>${adoptList.adoptRegDate}</td>
+											<td>${adoptList.dog.dogAdoptionStatus}</td>
+										</tr>
+									</c:forEach>
+								</c:when>
+							</c:choose>
+						</tbody>
+					</table>
+
+					<div class='buttons'>
+						<button type='button' class='btn btn-primary' id='complete'>분양
+							완료</button>
+						&nbsp;
+						<button type='button' class='btn btn-warning' id='cancel'>분양
+							취소</button>
+					</div>
+
+					<br> <br> <br>
+
+					<div id="pagination">
+						<ul class="pagination">
+							<c:if test="${pagination.prev}">
+								<li><a href='#'
+									onclick="fn_prev('${pagination.page}','${pagination.range}','${pagination.rangeSize}')">&laquo;
+								</a></li>
+							</c:if>
+
+							<c:forEach begin="${pagination.startPage}"
+								end="${pagination.endPage}" var="idx">
+								<li
+									class="<c:out value="${pagination.page == idx ? 'active' : ''}"/>">
+									<a href="#"
+									onclick="fn_pagination('${idx}','${pagination.range}','${pagination.rangeSize}')">${idx}</a>
+								</li>
+							</c:forEach>
+
+							<c:if test="${pagination.next}">
+								<li><a href='#'
+									onclick="fn_next('${pagination.page}','${pagination.range}','${pagination.rangeSize}')">&raquo;
+								</a></li>
+							</c:if>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>
