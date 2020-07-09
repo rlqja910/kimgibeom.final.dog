@@ -22,7 +22,7 @@
 		               phone_number, 
 		               e_mail, 
 		               reg_date,
-		               ROW_NUMBER() OVER(order by reg_date DESC) as RNUM
+		               ROW_NUMBER() OVER(order by reg_date DESC, user_id DESC) as RNUM
 		         from users
 		         where 1=1
 		         	<include refid='search'></include>)

@@ -16,7 +16,7 @@ public interface UserService {
 	
 	int readUserListCnt(UserSearch userSearch);
 
-	List<User> readUserList(UserSearch UserSearch);
+	List<User> readUserList(UserSearch userSearch);
 	
 	List<User> readUsers();
 

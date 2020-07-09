@@ -148,13 +148,6 @@ function exception2(){
 		  fn_pagination(pageNo, '${pagination.range}', '${pagination.rangeSize}', '${search.keyword}', '${search.searchType}');
 	  }
    }
-   
-   if(${isDataDel2}===false) {
-	   let pageNo = ${pageNo};
-	  if(pageNo !== true){
-		  fn_prev(pageNo, '${pagination.range}', '${pagination.rangeSize}', '${search.keyword}', '${search.searchType}');
-	  }
-   }
 }
 
 $(() => {	

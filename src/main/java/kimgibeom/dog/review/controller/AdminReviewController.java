@@ -46,7 +46,7 @@ public class AdminReviewController {
 							  @RequestParam(required=false, defaultValue="1") int range,
 							  @RequestParam(required=false) String keyword,
 							  @RequestParam(required=false, defaultValue="title") String searchType,
-							  @RequestParam(required = false, defaultValue = "true") String isData) {
+							  @RequestParam(required = false, defaultValue="true") String isData) {
 		Search search = new Search();
 		Pagination pagination = new Pagination();
 		
@@ -59,10 +59,7 @@ public class AdminReviewController {
 		
 		List<Review> reviews = reviewService.readAdminReviews(pagination, search);
 		if(reviews.size() == 0 && page != 1) {
-			if(page == pagination.getStartPage()) {
-				range = range - 1;
-				model.addAttribute("isDataDel2", false);
-			}
+			if(page == pagination.getStartPage()) range = range - 1;
 			page = page - 1;
 			
 			pagination.pageInfo(page, range, listCnt);
@@ -77,7 +74,6 @@ public class AdminReviewController {
 		if (isData.equals("true")) model.addAttribute("isData", true);
 		else model.addAttribute("isData", false);
 		
-		model.addAttribute("isDataDel2", true);
 		model.addAttribute("saveFileName", saveFileName);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("search", search);
@@ -87,15 +83,14 @@ public class AdminReviewController {
 	}
 	
 	@RequestMapping("/reviewView")
-	public String moveReviewView(Model model, @RequestParam("reviewNum") int reviewNum,
+	public String moveReviewView(Model model, RedirectAttributes rttr,
 								 @RequestParam(required=false, defaultValue="1") int page,
 								 @RequestParam(required=false, defaultValue="1") int range,
-								 RedirectAttributes rttr) {
+								 @RequestParam("reviewNum") int reviewNum) {
 		List<ReviewReply> replies = reviewReplyService.readReviewReplies(reviewNum);
 		int replySize = replies.size();
 		
 		Review review = reviewService.readReview(reviewNum);
-
 		if (review == null) {
 			rttr.addAttribute("isData", false);
 			return "redirect:reviewListView";
@@ -117,7 +112,7 @@ public class AdminReviewController {
 	
 	@RequestMapping(value="/addReview", method=RequestMethod.POST)
 	public String addReview(String title, MultipartFile attachFile, String content,
-			@ModelAttribute("review") Review review, HttpServletRequest request) {
+							@ModelAttribute("review") Review review, HttpServletRequest request) {
 		String dir = request.getServletContext().getRealPath(attachDir); //물리적인 경로 생성
 		String attachName = attachFile.getOriginalFilename(); //원본 파일명
 		
@@ -159,12 +154,13 @@ public class AdminReviewController {
 		String attachName = attachFile.getOriginalFilename();
 		int reviewNum = Integer.parseInt(reviewNumStr);
 		
+		rttr.addAttribute("reviewNum", reviewNum);
+		rttr.addAttribute("page", Integer.parseInt(pageStr));
+		rttr.addAttribute("range", Integer.parseInt(rangeStr));
+		
 		if(attachFile.getOriginalFilename().equals("")) {
 			review = new Review(title, content);
 			review.setReviewNum(reviewNum);
-			rttr.addAttribute("reviewNum", reviewNum);
-			rttr.addAttribute("page", Integer.parseInt(pageStr));
-			rttr.addAttribute("range", Integer.parseInt(rangeStr));
 			reviewService.updateReviewWithOutImg(review);
 		}else {
 			UUID uuid = UUID.randomUUID();
@@ -175,9 +171,6 @@ public class AdminReviewController {
 			
 			review = new Review(title, content, saveFileName);
 			review.setReviewNum(reviewNum);
-			rttr.addAttribute("reviewNum", reviewNum);
-			rttr.addAttribute("page", Integer.parseInt(pageStr));
-			rttr.addAttribute("range", Integer.parseInt(rangeStr));
 			reviewService.updateReview(review);
 		}
 

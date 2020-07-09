@@ -10,11 +10,6 @@
 <%@ include file="../common/scriptImport.jsp"%>
 <script>
 function userDel(){
-	let params = {};
-	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
-	if (typeof params.page == 'undefined')
-		params.page = 1;
-	
 	let delUsers = [];
 	
 	$('#delete').click(() => {
@@ -49,7 +44,7 @@ function userDel(){
 							},
 							function(isConfirm) {
 								if(isConfirm) 
-									location.href = 'userListView?page=' + params.page;
+									location.reload();
 							});
 						}
 					})
@@ -77,7 +72,7 @@ function fn_prev(page, range, rangeSize, keyword, searchType){
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
 	url = url + "&keyword=" + keyword;
-	url = url + "&searchType=" + $("#searchType").val();
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
@@ -87,7 +82,7 @@ function fn_pagination(page, range, rangeSize, keyword, searchType){
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
 	url = url + "&keyword=" + keyword;
-	url = url + "&searchType=" + $("#searchType").val();
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
@@ -100,13 +95,25 @@ function fn_next(page, range, rangeSize, keyword, searchType){
 	url = url + "?page=" + page;
 	url = url + "&range=" + range;
 	url = url + "&keyword=" + keyword;
-	url = url + "&searchType=" + $("#searchType").val();
+	url = url + "&searchType=" + searchType;
 	
 	location.href = url;
 }
 
-$(userDel);
-$(userSearch);
+function exception2(){
+   if(${isDataDel}===false) {
+	   let pageNo = ${pageNo};
+	  if(pageNo !== true){
+		  fn_pagination(pageNo, '${pagination.range}', '${pagination.rangeSize}', '${pagination.keyword}', '${pagination.searchType}');
+	  }
+   }
+}
+
+$(() => {
+	userDel();
+	userSearch();
+	exception2();
+});
 </script>
 <style>
 * {
@@ -303,12 +310,11 @@ th {
 											<td>${userList.userPhone}</td>
 											<td>${userList.userEmail}</td>
 											<td>${userList.regDate}</td>
-											<td><a
-												href='userModify/${userList.userId}?page=${pagination.page}&range=${pagination.range}'>
-													<button type='button' class='btn btn-default btn-xs'>
-														<span class='glyphicon glyphicon-pencil'></span>
-													</button>
-											</a></td>
+											<td>
+												<button type='button' class='btn btn-default btn-xs'>
+													<a href='03.html'><span class='glyphicon glyphicon-pencil'></span></a>
+												</button>
+											</td>
 										</tr>
 									</c:forEach>
 								</c:when>
@@ -323,34 +329,38 @@ th {
 						<button type='button' class='btn btn-warning' id='delete'>삭제</button>
 					</div>
 
-					<br> <br> <br>
+					<br>
+					<br>
+					<br>
 
 					<div id="pagination">
 						<ul class="pagination">
 							<c:if test="${pagination.prev}">
-								<li><a href='#'
-									onclick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
-																 '${search.keyword}', '${search.searchType}')">
-										&laquo; </a></li>
-							</c:if>
-
-							<c:forEach begin="${pagination.startPage}"
-								end="${pagination.endPage}" var="idx">
-								<li
-									class="<c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
-									<a href="#"
-									onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
-						    							  			   '${search.keyword}', '${search.searchType}')">
-										${idx} </a>
+								<li>
+									<a href='#' onclick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
+																 '${pagination.keyword}', '${pagination.searchType}')">
+										&laquo;
+									</a>
 								</li>
-							</c:forEach>
-
-							<c:if test="${pagination.next}">
-								<li><a href='#'
-									onclick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
-						        								 '${search.keyword}', '${search.searchType}')">
-										&raquo; </a></li>
 							</c:if>
+							
+							<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">		
+						    	<li class="<c:out value="${pagination.page == idx ? 'active' : ''}"/> ">
+						    		<a href="#" onclick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}',
+						    							  			   '${pagination.keyword}', '${pagination.searchType}')">
+						    			${idx}
+						    		</a>
+						    	</li>
+							</c:forEach>
+						    	
+						    <c:if test="${pagination.next}">
+						        <li>
+						        	<a href='#' onclick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}',
+						        								 '${pagination.keyword}', '${pagination.searchType}')">
+						        		&raquo;
+						        	</a>
+						        </li>
+						    </c:if>
 						</ul>
 					</div>
 				</div>

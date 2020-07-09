@@ -32,19 +32,16 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/reviewListView")
-	public String reviewList(Model model, @RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range,
-			@RequestParam(required = false, defaultValue = "true") String isData) {
-
+	public String reviewList(Model model, 
+							 @RequestParam(required = false, defaultValue = "1") int page,
+							 @RequestParam(required = false, defaultValue = "1") int range,
+							 @RequestParam(required = false, defaultValue = "true") String isData) {
 		int listCnt = reviewService.readUserReviewCnt();
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 
-		if (isData.equals("true")) {
-			model.addAttribute("isData", true);
-		}else {
-			model.addAttribute("isData", false);
-		}
+		if (isData.equals("true")) model.addAttribute("isData", true);
+		else model.addAttribute("isData", false);
 
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("reviewList", reviewService.readUserReviews(pagination));
@@ -52,8 +49,10 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/reviewView")
-	public String reviewView(Model model, RedirectAttributes rttr, @RequestParam("reviewNum") int reviewNum,
-			@RequestParam("page") int page, @RequestParam("range") int range) {
+	public String reviewView(Model model, RedirectAttributes rttr, 
+							 @RequestParam("reviewNum") int reviewNum,
+							 @RequestParam("page") int page, 
+							 @RequestParam("range") int range) {
 		List<ReviewReply> replies = reviewReplyService.readReviewReplies(reviewNum);
 		int replySize = replies.size();
 
@@ -78,7 +77,8 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/mainReviewList")
-	public String reviewList(Model model, RedirectAttributes rttr, @RequestParam("reviewNum") int reviewNum) {
+	public String reviewList(Model model, RedirectAttributes rttr, 
+							 @RequestParam("reviewNum") int reviewNum) {
 		rttr.addAttribute("reviewNum", reviewNum);
 
 		return "redirect:review/reviewView";
@@ -98,8 +98,10 @@ public class ReviewController {
 
 	@ResponseBody
 	@RequestMapping("/addReply")
-	public int addReply(@RequestParam("content") String content, @RequestParam("userId") String userId,
-			@RequestParam("reviewNumStr") String reviewNumStr, @ModelAttribute("reviewReply") ReviewReply reviewReply) {
+	public int addReply(@RequestParam("content") String content, 
+						@RequestParam("userId") String userId,
+						@RequestParam("reviewNumStr") String reviewNumStr, 
+						@ModelAttribute("reviewReply") ReviewReply reviewReply) {
 		int reviewNum = Integer.parseInt(reviewNumStr);
 		reviewReply = new ReviewReply(reviewNum, userId, content);
 
