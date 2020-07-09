@@ -91,11 +91,6 @@ function reportList() {
 		</tr>
 		</c:forEach>`)
 		
-		$('#pagination').find('a').each(function() {
-			if (Number($(this).text()) > 1) // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동
-				console.log('ㅇㅁ');
-		})
-		
 	if ($('tbody').html() == ``) {
 		$('#pagination').find('a').each(function() {
 			if (params.page > 1) { // 2 이상의 페이지에서 게시물을 모두 삭제한 경우 전 페이지로 이동

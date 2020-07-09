@@ -93,11 +93,11 @@ function readReports() {
 				location.href = './reportListView?page=' + (params.page - 1);
 			}
 		})
+		
 		$('.reportCont').html('<br><br><br><div class="reportEmpty">등록된 게시글이 없습니다.</div><br>');
 		$('.page').find('li').first().after('<li><a href="">1</a></li>');
 		$('.page').find('a').removeAttr('href');
 		$('.page').find('a').removeAttr('style');
-			
 	}
 	
 	$('img').each(function() { // 이미지가 없는 글

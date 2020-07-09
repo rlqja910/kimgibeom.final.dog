@@ -201,8 +201,8 @@ body {
 			<div class='header'>
 				<strong>&nbsp;&nbsp;ADMINSTRATOR</strong>
 				<div id='topButton'>
-					<<a href='<c:url value='../common/logoRegist'/>'>로고관리</a>&nbsp;|&nbsp;
-					<a href='<c:url value='../common/bannerRegist'/>'>배너관리</a>&nbsp;|&nbsp;
+					<a href='<c:url value='../../common/logoRegist'/>'>로고관리</a>&nbsp;|&nbsp;
+					<a href='<c:url value='../../common/bannerRegist'/>'>배너관리</a>&nbsp;|&nbsp;
 					<a href='<c:url value='/'/>'>홈페이지 돌아가기</a>&nbsp;|&nbsp; <a
 						href='<c:url value='../../../user/logout'/>'>로그아웃</a>
 				</div>
