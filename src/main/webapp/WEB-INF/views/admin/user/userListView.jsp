@@ -325,7 +325,7 @@ th {
 
 					<div class='buttons'>
 						<button type='button' class='btn btn-primary' id='add'
-							onClick="location.href='02.html'">등록</button>
+							onClick="location.href='userRegist'">등록</button>
 						&nbsp;
 						<button type='button' class='btn btn-warning' id='delete'>삭제</button>
 					</div>

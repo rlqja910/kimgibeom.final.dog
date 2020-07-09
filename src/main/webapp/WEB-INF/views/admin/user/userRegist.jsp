@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,17 +9,129 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <%@ include file="../common/scriptImport.jsp"%>
 <script>
-function idOverlapTest(){
-	$('#idOverlap').on('click', () => {
-		if($('#userId').val()){
-			$('#idOverlapMsg').html('사용 가능한 아이디입니다.');
-		}else {
-			$('#idOverlapMsg').html('아이디를 입력해주세요.');
+let availCheck=false;
+
+function clearConfirmMsg(){
+	$('#idMsg').css("display", "none");
+	$('#pwMsg').css("display", "none");
+	$('#nameMsg').css("display", "none");
+	$('#phoneMsg').css("display", "none");
+	$('#emailMsg').css("display", "none");
+}
+
+function idCheck(){ //ID 중복확인
+	$('#idCheck').click(()=>{ 
+		clearConfirmMsg();
+		let idCheck = /^[a-z]{1}[a-z0-9]{7,11}$/; //정규식으로 ID 제한
+
+		if($('#userId').val() === ''){
+			swal('','아이디를 입력해주세요.','error'); 
+		}else if(!idCheck.test($('#userId').val())){
+			swal('','아이디가 조건에 맞지 않습니다.','error');
+		}else{ 
+			$.ajax({ 
+				url:'idCheck', 
+				data:{
+					userId:$('#userId').val(),
+				},
+				success: (result) =>{ 
+					if(result){
+						swal('','사용 가능한 아이디입니다','success');
+						availCheck=true;
+					}else{
+						swal('','이미 사용중인 아이디입니다','error');
+					}
+				},
+			});
 		}
 	});
 }
 
-$(idOverlapTest);
+function idOverlapTest(){
+	$('#userAdd').click(() => {
+		clearConfirmMsg();
+		
+		if(availCheck === true){
+			let idCheck = /^[a-z]{1}[a-z0-9]{7,11}$/; //정규식으로 ID 제한
+			let pwCheck = /((?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9가-힣]).{8,15})/; // 정규식으로 PW 제한
+			let emailCheck = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 정규식으로 EMAIL 제한
+
+			// 아이디 예외처리
+			if($('#userId').val() === ''){
+				$('#idMsg').css("display", "inline").text('아이디를 입력해주세요.');
+				return;
+			}else if(!idCheck.test($('#userId').val())){
+				$('#idMsg').css("display", "inline").text('아이디가 조건에 맞지 않습니다.');
+				return;
+				
+			// 비밀번호 예외처리
+			}else if($('#userPw').val() === ''){
+				$('#pwMsg').css("display", "inline").text('비밀번호를 입력해주세요.');
+				return;
+			}else if(!pwCheck.test($('#userPw').val())){
+				$('#pwMsg').css("display", "inline").text('비밀번호가 조건에 맞지 않습니다.');
+				return;
+				
+			// 이름 예외처리
+			}else if($('#userName').val() === ''){
+				$('#nameMsg').css("display", "inline").text('이름을 입력해주세요.');
+				return;
+				
+			// 전화번호 예외처리
+			}else if($('#userPhone').val() === '' || $('#userPhone2').val() === '' || $('#userPhone3').val() === ''){
+				$('#phoneMsg').css("display", "inline").text('전화번호를 입력해주세요.');
+				return;
+			}else if($('#userPhone').val().length != 3||$('#userPhone2').val().length != 4||$('#userPhone3').val().length != 4){
+				$('#phoneMsg').css("display", "block").text('전화번호 형식에 맞게 입력해주세요.(000-0000-0000)');
+				return;
+			
+			// 이메일 예외처리
+			}else if($('#userEmail').val() === ''){
+				$('#emailMsg').css("display", "inline").text('이메일을 입력해주세요.');
+				return;
+			}else if(!emailCheck.test($('#userEmail').val())){
+				$('#emailMsg').css("display", "inline").text('이메일이 조건에 맞지 않습니다.');
+				return;
+				
+			}else{
+				swal({
+					title: '',
+					text: '회원 등록이 완료되었습니다.',
+					type: 'success',
+				},function(){	
+					$.ajax({
+						url: 'userRegistProc',
+						method:'post',
+						data: {
+								'userId':  $('#userId').val().trim(),
+								'userPw':  $('#userPw').val().trim(),
+								'userName':  $('#userName').val().trim(),
+								'userPhone': $('#userPhone').val() +'-'+ $('#userPhone2').val()+'-'+ $('#userPhone3').val(),
+								'userEmail':  $('#userEmail').val().trim(),
+						}
+					});
+					
+					location.href='<c:url value="/admin/user/userListView"/>'
+				});
+			}
+		}else{
+			swal('','아이디 중복확인을 해주세요');
+			return;
+		}
+	})
+}
+
+function numberMaxLength(e){
+    if(e.value.length > e.maxLength){
+        e.value = e.value.slice(0, e.maxLength);
+    }
+}
+
+$(()=>{
+	idCheck();
+	clearConfirmMsg();
+	idOverlapTest();
+});
 </script>
 <style>
 * {
@@ -125,6 +238,10 @@ p {
 	margin-bottom: 0;
 	font-size: 8px;
 }
+
+.msg {
+	color: red;
+}
 </style>
 </head>
 <body>
@@ -155,37 +272,46 @@ p {
 							<tr>
 								<th>아이디</th>
 								<td><input type='text' id='userId' />&nbsp;
-									<button type='button' id='idOverlap'>중복확인</button> <span
-									id='idOverlapMsg' style='color: red'></span> <br>
+									<button type='button' id='idCheck'>중복확인</button> <span
+									id='idMsg' class='msg'></span> <br>
 									<p>* 8자리 이상 12자리 이하, 영문, 숫자 최소 1개 이상 가능(시작은 영문, 공백불가)</p></td>
 							</tr>
 							<tr>
 								<th>비밀번호</th>
-								<td><input type='password' />
+								<td><input id='userPw' type='password' /> <span id='pwMsg'
+									class='msg'></span> <br>
 									<p>* 8자리 이상 16자리 이하, 영소문자, 숫자, 특수문자 각 최소 1개 이상 가능(공백불가)</p></td>
 							</tr>
 							<tr>
 								<th>이름</th>
-								<td><input type='text' /></td>
+								<td><input id='userName' type='text' /> <span id='nameMsg'
+									class='msg'></span></td>
 							</tr>
 							<tr>
 								<th>전화번호</th>
-								<td><input type='text' style='width: 80px;' /><strong>&nbsp;
-										- &nbsp;</strong> <input type='text' style='width: 120px;' /><strong>&nbsp;
-										- &nbsp;</strong> <input type='text' style='width: 120px;' /></td>
+								<td><input id='userPhone' type='text' style='width: 80px;'
+									maxlength='3' oninput="numberMaxLength(this);" /><strong>
+										&nbsp; - &nbsp;</strong> <input id='userPhone2' type='text'
+									style='width: 120px;' maxlength='4'
+									oninput="numberMaxLength(this);" /><strong> &nbsp; -
+										&nbsp;</strong> <input id='userPhone3' type='text'
+									style='width: 120px;' maxlength='4'
+									oninput="numberMaxLength(this);" /> <span id='phoneMsg'
+									class='msg'></span></td>
 							</tr>
 							<tr>
 								<th>이메일</th>
-								<td><input type='email' style='width: 370px;' /></td>
+								<td><input id='userEmail' type='email'
+									style='width: 370px;' /> <span id='emailMsg' class='msg'></span>
+								</td>
 							</tr>
 						</table>
 
 						<div class='button' style='text-align: right;'>
-							<button type='button' class='btn btn-primary'
-								onClick="location.href='01.html'">등록</button>
+							<button type='button' id='userAdd' class='btn btn-primary'>등록</button>
 							&nbsp;
 							<button type='button' class='btn btn-default'
-								onClick="location.href='01.html'">취소</button>
+								onClick="location.href='<c:url value="/admin/user/userListView"/>'">취소</button>
 						</div>
 					</form>
 				</div>
