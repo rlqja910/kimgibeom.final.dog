@@ -9,6 +9,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@ include file="../common/scriptImport.jsp"%>
 <script>
+function complete(){
+	$('#complete').click(() => {
+		if($('#adoptTable input:checked').val()){
+			for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
+				let dogNumber = $('#adoptTable input:checked').eq(i).val();
+				let splitAdoptNumDogNum = dogNumber.split('/');
+				
+				$.ajax({
+					url: 'adoptProc',
+					data: {
+							'adoptNum':  splitAdoptNumDogNum[0],
+							'dogNum':  splitAdoptNumDogNum[1],
+					},
+					success:()=>{
+						swal({
+							title: '입양이 완료되었습니다',
+							text: '',
+							type: 'success',
+						},function(){
+							location.reload();
+						});
+					}
+				});
+			
+			} 
+		}else{
+			swal({
+				title: '', 
+				text: '항목을 선택해주세요.',
+				type:'warning',
+			})
+		}
+	});
+}
+
+function exception(){
+	  if(${isDataDel}===false) {
+		  let pageNo = ${pageNo};
+		 if(pageNo !== true){
+		  fn_pagination(pageNo, '${pagination.range}', '${pagination.rangeSize}','${search.searchType}');
+		 }
+	  }
+}
+
+function cancel(){
+	$('#cancel').click(() => {
+		if($('#adoptTable input:checked').val()){
+				swal({
+					title: '',
+					text: '정말 취소하시겠습니까?',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonText: '확인',
+					cancelButtonText: '취소',
+					closeOnConfirm: false
+				},
+				function(isConfirm) {				
+						if(isConfirm) {
+							for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
+								let dogNumber = $('#adoptTable input:checked').eq(i).val();
+								let splitAdoptNumDogNum = dogNumber.split('/');
+								
+							$.ajax({
+								url: 'adoptCancel',
+								data: {
+									'adoptNum':  splitAdoptNumDogNum[0],
+								},
+								success: () => {
+									location.reload();
+								}
+							});
+						}	
+					}
+				});
+		}else{
+			swal({
+				title: '', 
+				text: '삭제할 항목을 선택해주세요.',
+				confirmButtonText: '확인',
+			})
+		}	
+	});
+}
 
 function selectSort(){
 	$('#selectBox').change(()=>{
@@ -69,6 +152,9 @@ function fn_next(page, range, rangeSize,searchType){
 }
 
 $(() => {
+	complete();
+	cancel();
+	exception();
 	selectSort();
 	
 	if(sessionStorage.getItem("selectStorage")==='입양미완료'){
@@ -80,33 +166,6 @@ $(() => {
 	else if(sessionStorage.getItem("selectStorage")==='전체'){
 		$('#selectBox').val('전체').prop("selected",true);
 	}
-	
-	$('#complete').click(() => {
-		if($('input:checkbox').is(':checked')) {
-			swal({
-				title: '',
-				text: '분양을 완료하시겠습니까?',
-				showCancelButton: true,
-				confirmButtonText: '확인',
-				cancelButtonText: '취소',
-				closeOnConfirm: false
-			})
-		}
-	});
-	
-	$('#cancel').click(() => {
-		if($('input:checkbox').is(':checked')) {
-			swal({
-				title: '',
-				text: '분양을 취소하시겠습니까?',
-				type: 'warning',
-				showCancelButton: true,
-				confirmButtonText: '확인',
-				cancelButtonText: '취소',
-				closeOnConfirm: false
-			})
-		}
-	});
 });
 </script>
 <style>
@@ -280,13 +339,14 @@ th {
 					<br>
 					<p>&nbsp;</p>
 
-					<table class='table table-hover'>
+					<table class='table table-hover' id='adoptTable'>
 						<thead>
 							<tr>
 								<th>선택</th>
-								<th>번호</th>
+								<th>예약번호</th>
 								<th>신청자</th>
-								<th>유기견 이름</th>
+								<th>유기견명</th>
+								<th>유기번호</th>
 								<th class='phone_num'>핸드폰 번호</th>
 								<th class='date'>신청일</th>
 								<th class='state'>상태</th>
@@ -302,10 +362,18 @@ th {
 								<c:when test="${!empty adoptList}">
 									<c:forEach var="adoptList" items="${adoptList}">
 										<tr>
-											<td><input type='checkbox' /></td>
+											<c:if test="${adoptList.dog.dogAdoptionStatus=='입양완료'}">
+												<td><input type='checkbox' disabled /></td>
+											</c:if>
+											<c:if test="${adoptList.dog.dogAdoptionStatus=='입양미완료'}">
+												<td><input type='checkbox'
+													value='${adoptList.adoptNum}/${adoptList.dog.dogNum}'
+													name='adoptCheck' /></td>
+											</c:if>
 											<td>${adoptList.adoptNum}</td>
 											<td>${adoptList.user.userName}</td>
 											<td>${adoptList.dog.dogName}</td>
+											<td>${adoptList.dog.dogNum}</td>
 											<td>${adoptList.user.userPhone}</td>
 											<td>${fn:substring(adoptList.adoptRegDate,0,10)}</td>
 											<td>${adoptList.dog.dogAdoptionStatus}</td>

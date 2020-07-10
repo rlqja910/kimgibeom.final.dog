@@ -44,4 +44,19 @@ public class AdoptDaoImpl implements AdoptDao {
 	public List<Adopt> getAdopts(AdoptPagination adoptPagination) {
 		return adoptMap.getAdopts(adoptPagination);
 	}
+
+	@Override
+	public int restDelAdopt(int adoptNum, int dogNum) {
+		return adoptMap.restDelAdopt(adoptNum, dogNum);
+	}
+
+	@Override
+	public int completeAdopt(int adoptNum, int dogNum) {
+		return adoptMap.completeAdopt(adoptNum, dogNum);
+	}
+
+	@Override
+	public int delAdopt(int adoptNum) {
+		return adoptMap.delAdopt(adoptNum);
+	}
 }

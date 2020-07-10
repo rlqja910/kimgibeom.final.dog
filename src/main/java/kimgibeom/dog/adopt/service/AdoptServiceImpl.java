@@ -41,7 +41,7 @@ public class AdoptServiceImpl implements AdoptService {
 
 	@Override
 	public int raedAdoptListCnt(AdoptSearch adoptSearch) {
-		System.out.println(adoptSearch.getSearchType()+"123123213123");
+		System.out.println(adoptSearch.getSearchType() + "123123213123");
 		System.out.println(adoptDao.getAdoptListCnt(adoptSearch));
 		System.out.println("++++++++++++++++++++222222");
 
@@ -51,5 +51,20 @@ public class AdoptServiceImpl implements AdoptService {
 	@Override
 	public List<Adopt> raedAdopts(AdoptPagination adoptPagination) {
 		return adoptDao.getAdopts(adoptPagination);
+	}
+
+	@Override
+	public int outAdopt(int adoptNum, int dogNum) {
+		return adoptDao.restDelAdopt(adoptNum, dogNum);
+	}
+
+	@Override
+	public int successAdopt(int adoptNum, int dogNum) {
+		return adoptDao.completeAdopt(adoptNum, dogNum);
+	}
+
+	@Override
+	public int removeAdopt(int adoptNum) {
+		return adoptDao.delAdopt(adoptNum);
 	}
 }

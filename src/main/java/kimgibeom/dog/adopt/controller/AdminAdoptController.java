@@ -23,15 +23,12 @@ public class AdminAdoptController {
 			@RequestParam(required = false, defaultValue = "1") int range,
 			@RequestParam(required = false, defaultValue = "전체") String searchType) {
 		AdoptSearch adoptSearch = new AdoptSearch();
-		System.out.println(searchType + "------------------");
 		if (searchType.equals("전체"))
 			searchType = "";
 		adoptSearch.setSearchType(searchType);
 
 		int listCnt = adoptService.raedAdoptListCnt(adoptSearch);
 		adoptSearch.pageInfo(page, range, listCnt);
-
-		System.out.println(adoptSearch.getSearchType() + "------------------");
 
 		List<Adopt> adopts = adoptService.raedAdopts(adoptSearch);
 		if (adopts.size() == 0 && page != 1) {
@@ -49,13 +46,23 @@ public class AdminAdoptController {
 			model.addAttribute("pageNo", true);
 		}
 
-		for (Adopt aaa : adopts) {
-			System.out.println(aaa.getAdoptNum());
-			System.out.println(aaa.getUser().getUserName());
-		}
-
 		model.addAttribute("pagination", adoptSearch);
 		model.addAttribute("adoptList", adopts);
+
+		return "admin/adopt/adoptListView";
+	}
+
+	@RequestMapping(value = "/adoptProc")
+	public String adoptProc(int adoptNum, int dogNum) {
+		adoptService.outAdopt(adoptNum, dogNum);
+		adoptService.successAdopt(adoptNum, dogNum);
+
+		return "admin/adopt/adoptListView";
+	}
+
+	@RequestMapping(value = "/adoptCancel")
+	public String adoptCancel(int adoptNum) {
+		adoptService.removeAdopt(adoptNum);
 
 		return "admin/adopt/adoptListView";
 	}
