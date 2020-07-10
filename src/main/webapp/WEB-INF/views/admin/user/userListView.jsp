@@ -50,6 +50,12 @@ function userDel(){
 					})
 				}
 			});
+		}else{
+			swal({
+				title: '',
+				text: '삭제할 회원을 선택해주세요',
+				type: 'warning',
+			});
 		}
 	});
 }

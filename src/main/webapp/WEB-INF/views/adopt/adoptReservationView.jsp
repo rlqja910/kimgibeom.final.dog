@@ -16,20 +16,49 @@ let adoptsCnt=${adoptsCnt};
 $(()=>{
 	adoptList();
 	
-	$('#adoptCancel').click(()=>{
-		$.ajax({
-			success: () =>{
+	$('#adoptCancel').click(() => {
+		if($('#reservationTable input:checked').val()){
 				swal({
-					title:'',
-					text:'입양신청이 취소되었습니다',
-					type:'success', 
+					title: '',
+					text: '정말 취소하시겠습니까?',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonText: '확인',
+					cancelButtonText: '취소',
+					closeOnConfirm: false
 				},
-				function(result){
-						location.href='#';
+				function(isConfirm) {				
+						if(isConfirm) {
+							for(let i=0; i < $('input[name=reservationCheckBox]:checked').length; i++){
+								let adoptNum = $('#reservationTable input:checked').eq(i).val();
+								
+							$.ajax({
+								url: 'adoptCancel',
+								data: {
+									'adoptNum':  adoptNum,
+								},
+								success: () => {
+									swal({
+										title: '',
+										text: '입양 신청이 취소되었습니다',
+										type: 'success',
+										confirmButtonText: '확인',
+									},function(){
+										location.href='adoptReservationView'
+									});
+								}
+							});
+						}	
+					}
+				});
+			}else{
+				swal({
+					title: '', 
+					text: '취소할 항목을 선택해주세요.',
+					confirmButtonText: '확인',
 				})
-			}
+			}	
 		});
-	});
 	
 	function adoptList(){
 		$('#pagingUl').append('<li><a href="#" id="firstViewBtn"><<</a></li>');

@@ -33,12 +33,12 @@ function userUpdate(){
 		let updateUserName=$('#userName').val().replace(/ /gi, '');
 		
 		if($('#userPw').val() ===''){
-			$('#pwmsg').text('암호를 입력하세요');
+			$('#pwmsg').text('비밀번호를 입력하세요');
 			return;
 		}
 		
 		if(!pwCheck.test($('#userPw').val())){
-			$('#pwmsg').text('암호가 조건에 맞지 않습니다');
+			$('#pwmsg').text('비밀번호가 조건에 맞지 않습니다');
 			return;
 		}
 

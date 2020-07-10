@@ -32,32 +32,32 @@ function addReview(){
 }
 
 function fn_chkByteTitle(obj){
-	   let maxByte = 100; //최대 입력 바이트 수
-	   let str = obj.value;
-	   let strLength = str.length;
-	   
-	   let titleByte = 0; 
-	   let titleLength = 0; 
-	   let oneChar = "";
-	   let str2 = "";
-	   
-	   for(let i=0; i<strLength; i++){
-	      oneChar = str.charAt(i); //한글자씩 분해
-	      
-	      if(escape(oneChar).length > 4) titleByte += 3; //AS32UTF8은 한글 3byte로 인식함
-	      else titleByte++; //영어 숫자 특수문자 1byte 
-	      
-	      if(titleByte <= maxByte) titleLength = i + 1; //리턴할 문자열 갯수
-	   }
-	   
-	   if(titleByte > maxByte){
-	      $("#chkTitle").text("한글" + Math.round(maxByte/3) + "자 / 영문" + maxByte + "자까지 입력 가능합니다.");
-	      str2 = str.substr(0, titleLength); //문자열 자르기
-	      obj.value = str2;
-	   }else {
-	      $("#chkTitle").text("");
-	   }
-	}
+   let maxByte = 100; //최대 입력 바이트 수
+   let str = obj.value;
+   let strLength = str.length;
+   
+   let titleByte = 0; 
+   let titleLength = 0; 
+   let oneChar = "";
+   let str2 = "";
+   
+   for(let i=0; i<strLength; i++){
+      oneChar = str.charAt(i); //한글자씩 분해
+      
+      if(escape(oneChar).length > 4) titleByte += 3; //AS32UTF8은 한글 3byte로 인식함
+      else titleByte++; //영어 숫자 특수문자 1byte 
+      
+      if(titleByte <= maxByte) titleLength = i + 1; //리턴할 문자열 갯수
+   }
+   
+   if(titleByte > maxByte){
+      $("#chkTitle").text("한글" + Math.round(maxByte/3) + "자 / 영문" + maxByte + "자까지 입력 가능합니다.");
+      str2 = str.substr(0, titleLength); //문자열 자르기
+      obj.value = str2;
+   }else {
+      $("#chkTitle").text("");
+   }
+}
 
 function fn_chkFile(obj){
 	let ext = $("#imgFile").val().split(".").pop().toLowerCase(); 

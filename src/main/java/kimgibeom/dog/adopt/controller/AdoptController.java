@@ -37,6 +37,13 @@ public class AdoptController {
 		return isCorrect;
 	}
 
+	@RequestMapping(value = "/adoptCancel")
+	public String adoptCancel(int adoptNum) {
+		adoptService.removeAdopt(adoptNum);
+
+		return "adopt/adoptReservationView";
+	}
+
 	@RequestMapping("/reservation")
 	@ResponseBody
 	public boolean reservationProc(int dogNum, HttpServletRequest request, Model model) {
