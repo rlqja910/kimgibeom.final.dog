@@ -18,7 +18,7 @@ public class AdoptPagination {
 		this.range = range;
 		this.listCnt = listCnt;
 		this.listSize = 10;
-		this.rangeSize = 1;
+		this.rangeSize = 5;
 
 		this.pageCnt = (int) (Math.ceil((double) listCnt / listSize));
 		this.startPage = (range - 1) * rangeSize + 1;

@@ -12,28 +12,71 @@
 function complete(){
 	$('#complete').click(() => {
 		if($('#adoptTable input:checked').val()){
-			for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
-				let dogNumber = $('#adoptTable input:checked').eq(i).val();
-				let splitAdoptNumDogNum = dogNumber.split('/');
-				
-				$.ajax({
-					url: 'adoptProc',
-					data: {
-							'adoptNum':  splitAdoptNumDogNum[0],
-							'dogNum':  splitAdoptNumDogNum[1],
-					},
-					success:()=>{
-						swal({
-							title: '입양이 완료되었습니다',
-							text: '',
-							type: 'success',
-						},function(){
-							location.reload();
-						});
+					let isMany=false;
+					let end=0;
+					for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
+						console.log($('input[name=adoptCheck]:checked'));
+						let dog = $('#adoptTable input:checked').eq(i).val();
+						let dogNum = dog.split('/')[1];
+						
+						if(i == ($('input[name=adoptCheck]:checked').length)-1){
+							console.log("마지막")
+							break;
+						}else{
+							for(let j=i+1;j<$('input[name=adoptCheck]:checked').length;j++){
+								if(end===1){
+									break;
+								}
+								let dog2 = $('#adoptTable input:checked').eq(j).val();
+								let dogNum2 = dog2.split('/')[1];
+								console.log(dogNum);
+								console.log(dogNum2);
+								console.log('---------------------------------------');
+								
+								if(dogNum===dogNum2){
+									isMany=true;
+									console.log('같노');
+									end=1;
+									break;
+								}
+							}
+						}
+						
+						if(end===1){
+							break;
+						}
 					}
-				});
-			
-			} 
+					
+					if(isMany){
+						swal({
+							title: '분양완료 실패',
+							text: '유기견 한마리에 여러명이 분양완료신청 되었습니다',
+							type: 'error',
+						});
+					}else{
+						for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
+							let dogNumber = $('#adoptTable input:checked').eq(i).val();
+							let splitAdoptNumDogNum = dogNumber.split('/');
+							
+							$.ajax({
+								url: 'adoptProc',
+								data: {
+										'adoptNum':  splitAdoptNumDogNum[0],
+										'dogNum':  splitAdoptNumDogNum[1],
+								},
+								success:()=>{
+									swal({
+										title: '입양이 완료되었습니다',
+										text: '',
+										type: 'success',
+									},function(){
+										location.reload();
+									});
+								}
+							});
+						
+						} 
+					}
 		}else{
 			swal({
 				title: '', 
