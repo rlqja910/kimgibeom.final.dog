@@ -1,7 +1,5 @@
 package kimgibeom.dog.user.domain;
 
-import org.apache.ibatis.type.Alias;
-
 public class UserPagination {
 	private int listSize;
 	private int rangeSize;
@@ -14,65 +12,66 @@ public class UserPagination {
 	private int startList;
 	private boolean prev;
 	private boolean next;
-	
-	public UserPagination() {}
-	
+
+	public UserPagination() {
+	}
+
 	public void pageInfo(int page, int range, int listCnt) {
 		this.page = page;
 		this.range = range;
 		this.listCnt = listCnt;
 		this.listSize = 10;
-		this.rangeSize = 5; 
-		
-		this.pageCnt = (int)Math.ceil((double)listCnt/listSize);
+		this.rangeSize = 5;
+
+		this.pageCnt = (int) Math.ceil((double) listCnt / listSize);
 		this.startPage = (range - 1) * rangeSize + 1;
 		this.endPage = range * rangeSize;
 		this.startList = (page - 1) * listSize;
-		
+
 		this.prev = range == 1 ? false : true;
 		this.next = pageCnt > endPage ? true : false;
-		if(this.endPage > this.pageCnt) {
+		if (this.endPage > this.pageCnt) {
 			this.endPage = this.pageCnt;
 			this.next = false;
 		}
 	}
-	
+
 	public int getRangeSize() {
 		return rangeSize;
 	}
-	
+
 	public int getPage() {
 		return page;
 	}
-	
+
 	public void setPage(int page) {
 		this.page = page;
 	}
-	
+
 	public int getRange() {
 		return range;
 	}
-	
+
 	public void setRange(int range) {
 		this.range = range;
 	}
-	
+
 	public int getStartPage() {
 		return startPage;
 	}
-	
+
 	public void setStartPage(int startPage) {
 		this.startPage = startPage;
 	}
-	
+
 	public int getEndPage() {
 		return endPage;
 	}
-	
+
 	public void setEndPage(int endPage) {
 		this.endPage = endPage;
 	}
-	
+
 	public boolean isPrev() {
 		return prev;
 	}

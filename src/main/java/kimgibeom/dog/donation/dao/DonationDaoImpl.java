@@ -37,5 +37,4 @@ public class DonationDaoImpl implements DonationDao {
 	public List<Donation> getSearchSponsors(String name) {
 		return donationMap.getSearchSponsors(name);
 	}
-
 }

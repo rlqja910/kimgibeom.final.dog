@@ -19,5 +19,4 @@ public interface DonationDao {
 
 	// 후원자명 검색으로 리스트 가져오기
 	List<Donation> getSearchSponsors(String name);
-	
 }

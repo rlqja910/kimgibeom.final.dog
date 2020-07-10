@@ -15,12 +15,10 @@ function complete(){
 					let isMany=false;
 					let end=0;
 					for(let i=0; i < $('input[name=adoptCheck]:checked').length; i++){
-						console.log($('input[name=adoptCheck]:checked'));
 						let dog = $('#adoptTable input:checked').eq(i).val();
 						let dogNum = dog.split('/')[1];
 						
 						if(i == ($('input[name=adoptCheck]:checked').length)-1){
-							console.log("마지막")
 							break;
 						}else{
 							for(let j=i+1;j<$('input[name=adoptCheck]:checked').length;j++){
@@ -29,13 +27,9 @@ function complete(){
 								}
 								let dog2 = $('#adoptTable input:checked').eq(j).val();
 								let dogNum2 = dog2.split('/')[1];
-								console.log(dogNum);
-								console.log(dogNum2);
-								console.log('---------------------------------------');
 								
 								if(dogNum===dogNum2){
 									isMany=true;
-									console.log('같노');
 									end=1;
 									break;
 								}
@@ -143,19 +137,16 @@ function selectSort(){
 		if($("#selectBox option:selected").val()==='전체'){
 			$('#selectBox').val('전체').prop("selected",true);
 			sessionStorage.setItem("selectStorage",'전체');
-			console.log('1');
 			location.href = url;
 		}else if($("#selectBox option:selected").val()==='입양완료'){
 			$('#selectBox').val('입양완료').prop("selected",true);
 			url = url + "?searchType=입양완료";
 			sessionStorage.setItem("selectStorage",'입양완료');
-			console.log('2');
 			location.href = url;
 		}else if($("#selectBox option:selected").val()==='입양미완료'){
 			$('#selectBox').val('입양미완료').prop("selected",true);
 			url = url + "?searchType=입양미완료";
 			sessionStorage.setItem("selectStorage",'입양미완료');
-			console.log('3');
 			location.href = url;
 		}	
 	})

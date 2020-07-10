@@ -19,7 +19,9 @@ public interface AdoptDao {
 
 	int getAdoptListCnt(AdoptSearch adoptSearch);
 
-	List<Adopt> getAdopts(AdoptPagination adoptPagination);// 분양 완료 시 중복된 유기견 삭제
+	List<Adopt> getAdopts(AdoptPagination adoptPagination);
+
+	// 분양 완료 시 중복된 유기견 삭제
 
 	int restDelAdopt(@Param("adoptNum") int adoptNum, @Param("dogNum") int dogNum);
 

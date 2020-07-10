@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kimgibeom.dog.report.dao.map.ReportMap;
-import kimgibeom.dog.report.domain.Criteria;
 import kimgibeom.dog.report.domain.Report;
 import kimgibeom.dog.report.domain.SearchCriteria;
 
@@ -19,7 +18,7 @@ public class ReportDaoImpl implements ReportDao {
 	public List<Report> getReports(SearchCriteria scri) {
 		return reportMap.getReports(scri);
 	}
-	
+
 	@Override
 	public int getListCnt(SearchCriteria scri) {
 		return reportMap.getListCnt(scri);
@@ -39,7 +38,7 @@ public class ReportDaoImpl implements ReportDao {
 	public int modifyReport(Report report) {
 		return reportMap.modifyReport(report);
 	}
-	
+
 	@Override
 	public int modifyViewCnt(int reportNum) {
 		return reportMap.modifyViewCnt(reportNum);

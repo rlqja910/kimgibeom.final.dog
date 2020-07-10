@@ -8,9 +8,10 @@ public class Review {
 	private String content;
 	private Date regDate;
 	private String attachName;
-	
-	public Review() {}
-	
+
+	public Review() {
+	}
+
 	public Review(String title, String content) {
 		this.title = title;
 		this.content = content;
@@ -21,7 +22,7 @@ public class Review {
 		this.content = content;
 		this.attachName = attachName;
 	}
-	
+
 	public int getReviewNum() {
 		return reviewNum;
 	}

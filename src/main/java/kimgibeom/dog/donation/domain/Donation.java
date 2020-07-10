@@ -28,7 +28,7 @@ public class Donation {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public String getUserPhone() {
 		return userPhone;
 	}

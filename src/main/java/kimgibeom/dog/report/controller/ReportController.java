@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kimgibeom.dog.report.domain.Criteria;
 import kimgibeom.dog.report.domain.PageMaker;
 import kimgibeom.dog.report.domain.Report;
 import kimgibeom.dog.report.domain.ReportReply;

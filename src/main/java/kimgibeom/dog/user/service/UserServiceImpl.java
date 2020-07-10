@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 	public int writeUser(User user) {
 		return userDao.addUser(user);
 	}
-	
+
 	@Override
 	public int readUserListCnt(UserSearch userSearch) {
 		return userDao.getUserListCnt(userSearch);
@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
 	public List<User> readUserList(UserSearch userSearch) {
 		return userDao.getUserList(userSearch);
 	}
-	
+
 	@Override
-	public List<User> readUsers(){
+	public List<User> readUsers() {
 		return userDao.getUsers();
 	}
 
@@ -70,12 +70,12 @@ public class UserServiceImpl implements UserService {
 	public boolean withdrawUser(String userId) {
 		return userDao.delUser(userId) > 0;
 	}
-	
+
 	@Override
 	public User findUser(String userId) {
 		return userDao.getUser(userId);
 	}
-	
+
 	@Override
 	public int modUser(User user) {
 		return userDao.updateUser(user);

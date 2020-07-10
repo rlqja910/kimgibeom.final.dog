@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kimgibeom.dog.review.domain.Pagination;
@@ -23,8 +22,10 @@ import kimgibeom.dog.review.service.ReviewService;
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
-	@Autowired private ReviewService reviewService;
-	@Autowired private ReviewReplyService reviewReplyService;
+	@Autowired
+	private ReviewService reviewService;
+	@Autowired
+	private ReviewReplyService reviewReplyService;
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public String exception() {
@@ -32,16 +33,17 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/reviewListView")
-	public String reviewList(Model model, 
-							 @RequestParam(required = false, defaultValue = "1") int page,
-							 @RequestParam(required = false, defaultValue = "1") int range,
-							 @RequestParam(required = false, defaultValue = "true") String isData) {
+	public String reviewList(Model model, @RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "true") String isData) {
 		int listCnt = reviewService.readUserReviewCnt();
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 
-		if (isData.equals("true")) model.addAttribute("isData", true);
-		else model.addAttribute("isData", false);
+		if (isData.equals("true"))
+			model.addAttribute("isData", true);
+		else
+			model.addAttribute("isData", false);
 
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("reviewList", reviewService.readUserReviews(pagination));
@@ -49,17 +51,15 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/reviewView")
-	public String reviewView(Model model, RedirectAttributes rttr, 
-							 @RequestParam("reviewNum") int reviewNum,
-							 @RequestParam("page") int page, 
-							 @RequestParam("range") int range) {
+	public String reviewView(Model model, RedirectAttributes rttr, @RequestParam("reviewNum") int reviewNum,
+			@RequestParam("page") int page, @RequestParam("range") int range) {
 		List<ReviewReply> replies = reviewReplyService.readReviewReplies(reviewNum);
 		int replySize = replies.size();
 
 		int listCnt = reviewService.readUserReviewCnt();
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
-		
+
 		Review review = reviewService.readReview(reviewNum);
 
 		if (review == null) {
@@ -77,8 +77,7 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/mainReviewList")
-	public String reviewList(Model model, RedirectAttributes rttr, 
-							 @RequestParam("reviewNum") int reviewNum) {
+	public String reviewList(Model model, RedirectAttributes rttr, @RequestParam("reviewNum") int reviewNum) {
 		rttr.addAttribute("reviewNum", reviewNum);
 
 		return "redirect:review/reviewView";
@@ -98,10 +97,8 @@ public class ReviewController {
 
 	@ResponseBody
 	@RequestMapping("/addReply")
-	public int addReply(@RequestParam("content") String content, 
-						@RequestParam("userId") String userId,
-						@RequestParam("reviewNumStr") String reviewNumStr, 
-						@ModelAttribute("reviewReply") ReviewReply reviewReply) {
+	public int addReply(@RequestParam("content") String content, @RequestParam("userId") String userId,
+			@RequestParam("reviewNumStr") String reviewNumStr, @ModelAttribute("reviewReply") ReviewReply reviewReply) {
 		int reviewNum = Integer.parseInt(reviewNumStr);
 		reviewReply = new ReviewReply(reviewNum, userId, content);
 

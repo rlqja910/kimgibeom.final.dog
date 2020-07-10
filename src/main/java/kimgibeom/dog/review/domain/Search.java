@@ -2,9 +2,10 @@ package kimgibeom.dog.review.domain;
 
 public class Search {
 	private String searchType;
-	private String keyword;	
-	
-	public Search() {}
+	private String keyword;
+
+	public Search() {
+	}
 
 	public String getSearchType() {
 		return searchType;
@@ -17,7 +18,7 @@ public class Search {
 	public String getKeyword() {
 		return keyword;
 	}
-	
+
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}

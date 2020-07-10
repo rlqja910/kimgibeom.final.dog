@@ -70,9 +70,6 @@ public class AdoptController {
 		model.addAttribute("isOnePage", "null");
 		model.addAttribute("pageData", "null");
 
-		for (Adopt a : userAdoptList) {
-		}
-
 		JSONArray jsonDogArray = new JSONArray();
 
 		int adoptsCnt = userAdoptList.size(); // 데이터 개수

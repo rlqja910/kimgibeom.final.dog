@@ -8,9 +8,10 @@ public class ReviewReply {
 	private String userId;
 	private String content;
 	private Date regDate;
-	
-	public ReviewReply() {}
-	
+
+	public ReviewReply() {
+	}
+
 	public ReviewReply(int reviewNum, String userId, String content) {
 		this.reviewNum = reviewNum;
 		this.userId = userId;

@@ -1,13 +1,14 @@
 package kimgibeom.dog.user.domain;
 
-public class UserSearch extends UserPagination{
+public class UserSearch extends UserPagination {
 	private String searchType;
-	private String keyword;	
-	
-	public UserSearch() {}
+	private String keyword;
+
+	public UserSearch() {
+	}
 
 	public String getSearchType() {
-		return searchType; 
+		return searchType;
 	}
 
 	public void setSearchType(String searchType) {
@@ -17,7 +18,7 @@ public class UserSearch extends UserPagination{
 	public String getKeyword() {
 		return keyword;
 	}
-	
+
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}

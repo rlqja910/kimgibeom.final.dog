@@ -575,7 +575,7 @@ function fn_reviewView(reviewNum){
 						<li><a href='dog/dogView/${dog.dogNum}'>
 								<div>
 									<span>${dog.dogTitle}<br> <span>view</span></span>
-								</div> <img style='width:100%; height:100%;'
+								</div> <img style='width: 100%; height: 100%;'
 								src='<c:url value="attach/dog/${dog.attachName}" />' />
 						</a></li>
 					</c:forEach>

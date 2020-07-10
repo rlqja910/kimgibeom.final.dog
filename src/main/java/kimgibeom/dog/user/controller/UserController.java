@@ -137,15 +137,13 @@ public class UserController {
 			message.addRecipient(RecipientType.TO, new InternetAddress(userEmail));
 			message.setSubject("BEFF - 유기견 보호소 인증번호 발송");
 			message.setText("<div style='background-color:#efefef; width:500px; padding: 20px;'>"
-					+ "<div style='background-color:#fff; =padding:20px 0'>"
+					+ "<div style='background-color:#fff; padding:20px 0'>"
 					+ "<h3 style='text-align:center;font-weight:bold;'><span style='color:#f5bf25; font-size:48px;'>♥</span><br><br> <span style='font-size:25px;color:#1bb1bb'>안녕하세요. BEFF 입니다</span></h3>"
-					+ "<p style='text-align:center; margin-top:-5px;'>BEFF 비밀번호 찾기 인증번호는 다음과 같습니다</p>" +
-
-					"<div style='margin: 50px 0px 30px 0px; text-align:center;'>" +
-
-					"<ul  style='width: 260px; padding:15px 0px 15px 0px; border:1px solid #1bb1bb; border-radius:30px; margin:0 auto;'>"
+					+ "<p style='text-align:center; margin-top:-5px;'>BEFF 비밀번호 찾기 인증번호는 다음과 같습니다</p>"
+					+ "<div style='margin: 50px 0px 30px 0px; text-align:center;'>"
+					+ "<ul  style='width: 260px; padding:15px 0px 15px 0px; border:1px solid #1bb1bb; border-radius:30px; margin:0 auto;'>"
 					+ "<li style='list-style:none;'><p style='font-size:large; margin:0; font-weight:bold;'>인증번호:"
-					+ "<span style='color:red; font-weight:bold;'>"+code+"</span></p></li>" + "</ul>" + "</div>"
+					+ "<span style='color:red; font-weight:bold;'>" + code + "</span></p></li>" + "</ul>" + "</div>"
 					+ "</div>" + "</div>", "utf-8", "html");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,5 +193,4 @@ public class UserController {
 			return false;
 		}
 	}
-
 }

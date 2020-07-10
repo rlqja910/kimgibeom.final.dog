@@ -16,8 +16,6 @@ import kimgibeom.dog.donation.service.DonationService;
 import kimgibeom.dog.report.domain.Report;
 import kimgibeom.dog.report.domain.SearchCriteria;
 import kimgibeom.dog.report.service.ReportService;
-import kimgibeom.dog.review.domain.ReviewReply;
-import kimgibeom.dog.review.service.ReviewReplyService;
 import kimgibeom.dog.review.service.ReviewService;
 
 @Controller
@@ -40,15 +38,15 @@ public class MainController {
 		scri.setPerPageNum(10);
 		List<Report> reports = reportService.readReports(scri);
 		model.addAttribute("reports", reports);
-		
+
 		List<Donation> sponsorList = donationService.readSponsors();
-		model.addAttribute("sponsorList",sponsorList);
-		
+		model.addAttribute("sponsorList", sponsorList);
+
 		int donaMon = donationService.readDonationMon();
 		int donaTot = donationService.readDonationTot();
 		model.addAttribute("donaMon", donaMon);
 		model.addAttribute("donaTot", donaTot);
-		
+
 		return "admin/main";
 	}
 
@@ -66,7 +64,7 @@ public class MainController {
 		model.addAttribute("todayDogCnt", todayDogCnt);
 		model.addAttribute("afterAdoptDogCnt", afterAdoptDogCnt);
 		model.addAttribute("mainDogList", dogService.readDogs());
-		
+
 		model.addAttribute("mainReviewList", reviewService.readReviews());
 
 		return "main";

@@ -41,10 +41,6 @@ public class AdoptServiceImpl implements AdoptService {
 
 	@Override
 	public int raedAdoptListCnt(AdoptSearch adoptSearch) {
-		System.out.println(adoptSearch.getSearchType() + "123123213123");
-		System.out.println(adoptDao.getAdoptListCnt(adoptSearch));
-		System.out.println("++++++++++++++++++++222222");
-
 		return adoptDao.getAdoptListCnt(adoptSearch);
 	}
 

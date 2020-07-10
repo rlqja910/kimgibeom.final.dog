@@ -6,8 +6,8 @@ import kimgibeom.dog.review.domain.ReviewReply;
 
 public interface ReviewReplyService {
 	List<ReviewReply> readReviewReplies(int reviewNum);
-	
+
 	int writeReviewReply(ReviewReply reviewReply);
-	
+
 	int removeReviewReply(int replyNum);
 }

@@ -58,12 +58,12 @@ public class Report {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
 	public String getAttachName() {
 		return attachName;
 	}
 
 	public void setAttachName(String attachName) {
 		this.attachName = attachName;
-	}	
+	}
 }

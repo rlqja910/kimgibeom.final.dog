@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kimgibeom.dog.donation.domain.Donation;
 import kimgibeom.dog.donation.service.DonationService;
 
-@Controller    
+@Controller
 @RequestMapping("/admin/donation")
 public class AdmindonationController {
 	@Autowired
@@ -26,21 +26,21 @@ public class AdmindonationController {
 	public void donationListView(Model model) throws JsonProcessingException {
 		List<Donation> sponsors = donationService.readSponsors();
 
-		int sponsorsCnt = sponsors.size(); 
+		int sponsorsCnt = sponsors.size();
 		model.addAttribute("sponsorsCnt", sponsorsCnt);
 
 		ObjectMapper mapper = new ObjectMapper();
 		int pageCnt = 0;
 
 		if (sponsorsCnt % 10 == 0) {
-			pageCnt = sponsorsCnt / 10; 
+			pageCnt = sponsorsCnt / 10;
 		} else {
 			pageCnt = sponsorsCnt / 10 + 1;
 		}
 
 		model.addAttribute("totalPageCnt", pageCnt);
 
-		int lastPageDataCnt = sponsorsCnt % 10; 
+		int lastPageDataCnt = sponsorsCnt % 10;
 		if (lastPageDataCnt == 0) {
 			lastPageDataCnt = 10;
 		}
@@ -49,8 +49,8 @@ public class AdmindonationController {
 		}
 		model.addAttribute("lastPageDataCnt", lastPageDataCnt);
 
-		if (0 < sponsorsCnt && sponsorsCnt <= 10) { 
-			model.addAttribute("isOnePage", "true"); 
+		if (0 < sponsorsCnt && sponsorsCnt <= 10) {
+			model.addAttribute("isOnePage", "true");
 
 			String Jsonsponsors = mapper.writeValueAsString(sponsors); // sponsors를 문자열 형식으로 변환
 			model.addAttribute("onlyOnePageData", Jsonsponsors);
@@ -61,27 +61,27 @@ public class AdmindonationController {
 
 		} else {
 			try {
-				model.addAttribute("isOnePage", "false"); 
+				model.addAttribute("isOnePage", "false");
 				List<Donation> sponsorList = new ArrayList<Donation>();
-				for (int i = 1; i <= pageCnt; i++) { 
+				for (int i = 1; i <= pageCnt; i++) {
 
-					if (i == pageCnt) { 
+					if (i == pageCnt) {
 						int cnt = 0;
 						for (int j = 1; j <= lastPageDataCnt; j++) {
 							sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
 						}
-					}else {
+					} else {
 						int cnt = 0;
-						for (int j = 1; j <= 10; j++) { 
+						for (int j = 1; j <= 10; j++) {
 							sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
 						}
 					}
 				}
 
 				String JsonsponsorList = mapper.writeValueAsString(sponsorList);
-				model.addAttribute("pageData", JsonsponsorList); 
+				model.addAttribute("pageData", JsonsponsorList);
 
-			}catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -91,27 +91,27 @@ public class AdmindonationController {
 		model.addAttribute("donaMon", donaMon);
 		model.addAttribute("donaTot", donaTot);
 	}
-	
-	@RequestMapping(value= "/searchProc")
+
+	@RequestMapping(value = "/searchProc")
 	@ResponseBody
 	public HashMap<String, Object> searchSponsor(String userName) {
-		HashMap<String, Object> map = new HashMap<String,Object>();
-		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
 		List<Donation> sponsors = donationService.readSponsors(userName);
-		
-		int sponsorsCnt = sponsors.size(); 
+
+		int sponsorsCnt = sponsors.size();
 		map.put("sponsorsCnt", sponsorsCnt);
-		
+
 		int pageCnt = 0;
 
 		if (sponsorsCnt % 10 == 0) {
-			pageCnt = sponsorsCnt / 10; 
+			pageCnt = sponsorsCnt / 10;
 		} else {
 			pageCnt = sponsorsCnt / 10 + 1;
 		}
 		map.put("totalPageCnt", pageCnt);
 
-		int lastPageDataCnt = sponsorsCnt % 10; 
+		int lastPageDataCnt = sponsorsCnt % 10;
 		if (lastPageDataCnt == 0) {
 			lastPageDataCnt = 10;
 		}
@@ -120,7 +120,7 @@ public class AdmindonationController {
 		}
 		map.put("lastPageDataCnt", lastPageDataCnt);
 
-		if (0 < sponsorsCnt && sponsorsCnt <= 10) { 
+		if (0 < sponsorsCnt && sponsorsCnt <= 10) {
 			map.put("isOnePageData", true);
 			map.put("onlyOnePageData", sponsors);
 			map.put("isOnePage", true);
@@ -131,22 +131,22 @@ public class AdmindonationController {
 
 		} else {
 			map.put("isOnePage", false);
-				List<Donation> sponsorList = new ArrayList<Donation>();
-				for (int i = 1; i <= pageCnt; i++) { 
+			List<Donation> sponsorList = new ArrayList<Donation>();
+			for (int i = 1; i <= pageCnt; i++) {
 
-					if (i == pageCnt) { 
-						int cnt = 0;
-						for (int j = 1; j <= lastPageDataCnt; j++) {
-							sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
-						}
-					}else {
-						int cnt = 0;
-						for (int j = 1; j <= 10; j++) { 
-							sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
-						}
+				if (i == pageCnt) {
+					int cnt = 0;
+					for (int j = 1; j <= lastPageDataCnt; j++) {
+						sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
+					}
+				} else {
+					int cnt = 0;
+					for (int j = 1; j <= 10; j++) {
+						sponsorList.add(sponsors.get((i - 1) * 10 + cnt++));
 					}
 				}
-				map.put("pageData", sponsorList);
+			}
+			map.put("pageData", sponsorList);
 		}
 		return map;
 	}
